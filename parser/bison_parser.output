@@ -1,0 +1,5670 @@
+Terminals unused in grammar
+
+    KEYS
+    MIGRATE
+    COPY
+    REPLACE
+    RESTORE
+    MSETNX
+    ZREMRANGEBYRANK
+    ZREMRANGEBYSCORE
+    ZREVRANGE
+    ZREVRANGEBYSCORE
+    ZREVRANK
+    OP_NOTEQUAL
+    MATCH
+    LIKE
+    OP_EQUAL
+    OP_GREATERTHAN
+    OP_LESSTHAN
+    OP_GREATEREQ
+    OP_LESSEQ
+    ISNULL
+    IS
+    OP_ADD
+    OP_SUB
+    OP_MUL
+    OP_MOD
+    OP_DIVIDE
+    OP_XOR
+    UMINUS
+    OP_LBRACKET
+    OP_RBRACKET
+    OP_RP
+    OP_LP
+    JOIN
+    ON
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: stmtlist
+
+    2 stmtlist: stmt
+    3         | stmt stmtlist
+
+    4 stmt: key_stmt
+    5     | string_stmt
+    6     | hash_stmt
+    7     | list_stmt
+    8     | set_stmt
+    9     | zset_stmt
+   10     | connect_stmt
+
+   11 key_stmt: del_stmt
+   12         | dump_stmt
+   13         | exists_stmt
+   14         | expire_stmt
+   15         | expireat_stmt
+   16         | move_stmt
+   17         | object_stmt
+   18         | persist_stmt
+   19         | pexpire_stmt
+   20         | pexpireat_stmt
+   21         | pttl_stmt
+   22         | randomkey_stmt
+   23         | rename_stmt
+   24         | renamenx_stmt
+   25         | sort_stmt
+   26         | ttl_stmt
+   27         | type_stmt
+
+   28 string_stmt: append_stmt
+   29            | bicount_stmt
+   30            | setbit_stmt
+   31            | bitop_stmt
+   32            | decr_stmt
+   33            | decrby_stmt
+   34            | get_stmt
+   35            | getbit_stmt
+   36            | getrange_stmt
+   37            | getset_stmt
+   38            | incr_stmt
+   39            | incrby_stmt
+   40            | incrbyfloat_stmt
+   41            | mget_stmt
+   42            | mset_stmt
+   43            | psetex_stmt
+   44            | setkey_stmt
+   45            | setex_stmt
+   46            | setnx_stmt
+   47            | setrange_stmt
+   48            | strlen_stmt
+
+   49 hash_stmt: hdel_stmt
+   50          | hexists_stmt
+   51          | hget_stmt
+   52          | hgetall_stmt
+   53          | hincrby_stmt
+   54          | hincrbyfloat_stmt
+   55          | hkeys_stmt
+   56          | hlen_stmt
+   57          | hmget_stmt
+   58          | hmset_stmt
+   59          | hset_stmt
+   60          | hsetnx_stmt
+   61          | hvals_stmt
+
+   62 list_stmt: lindex_stmt
+   63          | linsert_stmt
+   64          | llen_stmt
+   65          | lpop_stmt
+   66          | lpush_stmt
+   67          | lpushx_stmt
+   68          | lrange_stmt
+   69          | lrem_stmt
+   70          | lset_stmt
+   71          | ltrim_stmt
+   72          | rpop_stmt
+   73          | rpoplpush_stmt
+   74          | rpush_stmt
+   75          | rpushx_stmt
+
+   76 set_stmt: sadd_stmt
+   77         | scard_stmt
+   78         | sdiff_stmt
+   79         | sdiffstore_stmt
+   80         | sinter_stmt
+   81         | sinterstore_stmt
+   82         | sismember_stmt
+   83         | smember_stmt
+   84         | smove_stmt
+   85         | spop_stmt
+   86         | srandmember_stmt
+   87         | srem_stmt
+   88         | sunion_stmt
+   89         | sunionstore_stmt
+
+   90 zset_stmt: zadd_stmt
+   91          | zcard_stmt
+   92          | zcount_stmt
+   93          | zincrby_stmt
+   94          | zrange_stmt
+   95          | zrangebyscore_stmt
+   96          | zrank_stmt
+   97          | zrem_stmt
+   98          | zscore_stmt
+   99          | zunionstore_stmt
+  100          | zinterstore_stmt
+
+  101 connect_stmt: select_stmt
+
+  102 del_stmt: DEL key_list
+
+  103 dump_stmt: DUMP keyname
+
+  104 exists_stmt: EXISTS keyname
+
+  105 expire_stmt: EXPIRE keyname timesecond
+
+  106 expireat_stmt: EXPIREAT keyname timeunix
+
+  107 move_stmt: MOVE keyname operandnum
+
+  108 object_stmt: OBJECT objoption keyname
+
+  109 objoption: REFCOUNT
+  110          | ENCODING
+  111          | IDLETIME
+
+  112 persist_stmt: PERSIST keyname
+
+  113 pexpire_stmt: PEXPIRE keyname timesecond
+
+  114 pexpireat_stmt: PEXPIREAT keyname timesecond
+
+  115 pttl_stmt: PTTL keyname
+
+  116 randomkey_stmt: RANDOMKEY
+
+  117 rename_stmt: RENAME keyname aliasname
+
+  118 renamenx_stmt: RENAMENX keyname aliasname
+
+  119 aliasname: identifier
+
+  120 sort_stmt: sort_clause opt_by_clause opt_limit_clause opt_sort_behavior opt_store_clause
+
+  121 sort_clause: SORT keyname
+
+  122 opt_by_clause: BY keyname
+  123              | %empty
+
+  124 opt_limit_clause: LIMIT operandnum operandnum
+  125                 | %empty
+
+  126 opt_store_clause: STORE keyname
+  127                 | %empty
+
+  128 opt_sort_behavior: ASC
+  129                  | DESC
+  130                  | ALPHA
+  131                  | %empty
+
+  132 ttl_stmt: TTL keyname
+
+  133 type_stmt: TYPE keyname
+
+  134 append_stmt: APPEND key_string_name value
+
+  135 bicount_stmt: BITCOUNT key_string_name
+
+  136 setbit_stmt: SETBIT key_string_name operandnum value
+
+  137 bitop_stmt: BITOP operation key_string_list
+
+  138 operation: AND
+  139          | OR
+  140          | XOR
+  141          | NOT
+
+  142 decr_stmt: DECR key_string_name
+
+  143 decrby_stmt: DECRBY key_string_name num_literal
+
+  144 get_stmt: GET key_string_name
+
+  145 getbit_stmt: GETBIT key_string_name operandnum
+
+  146 getrange_stmt: GETRANGE key_string_name operandnum operandnum
+
+  147 getset_stmt: GETSET key_string_name value
+
+  148 incr_stmt: INCR key_string_name
+
+  149 incrby_stmt: INCRBY key_string_name num_literal
+
+  150 incrbyfloat_stmt: INCRBYFLOAT key_string_name float_literal
+
+  151 mget_stmt: MGET key_string_list
+
+  152 mset_stmt: MSET key_string_value_list
+
+  153 psetex_stmt: PSETEX key_string_name timesecond value
+
+  154 setkey_stmt: SET setkey_clause opt_expiretime_clause opt_setkey_behavior
+
+  155 setkey_clause: key_string_name value
+
+  156 opt_expiretime_clause: EX timesecond
+  157                      | PX timesecond
+  158                      | %empty
+
+  159 opt_setkey_behavior: NX
+  160                    | XX
+  161                    | %empty
+
+  162 setex_stmt: SETEX key_string_name timesecond value
+
+  163 setnx_stmt: SETNX key_string_name value
+
+  164 setrange_stmt: SETRANGE key_string_name operandnum value
+
+  165 strlen_stmt: STRLEN key_string_name
+
+  166 hdel_stmt: HDEL key_hash_name del_field_list
+
+  167 hexists_stmt: HEXISTS key_hash_name field_name
+
+  168 hget_stmt: HGET key_hash_name field_name
+
+  169 hgetall_stmt: HGETALL key_hash_name
+
+  170 hincrby_stmt: HINCRBY key_hash_name field_name num_literal
+
+  171 hincrbyfloat_stmt: HINCRBYFLOAT key_hash_name field_name float_literal
+
+  172 hkeys_stmt: HKEYS key_hash_name
+
+  173 hlen_stmt: HLEN key_hash_name
+
+  174 hmget_stmt: HMGET key_hash_name field_list
+
+  175 hmset_stmt: HMSET key_hash_name field_value_list
+
+  176 hset_stmt: HSET key_hash_name field_value
+
+  177 hsetnx_stmt: HSETNX key_hash_name field_value
+
+  178 hvals_stmt: HVALS key_hash_name
+
+  179 lindex_stmt: LINDEX key_list_name operandnum
+
+  180 linsert_stmt: LINSERT key_list_name opt_linsert_behavior value value
+
+  181 opt_linsert_behavior: BEFORE
+  182                     | AFTER
+
+  183 llen_stmt: LLEN key_list_name
+
+  184 lpop_stmt: LPOP key_list_name
+
+  185 lpush_stmt: LPUSH key_list_name value_list
+
+  186 lpushx_stmt: LPUSHX key_list_name value
+
+  187 lrange_stmt: LRANGE key_list_name operandnum operandnum
+
+  188 lrem_stmt: LREM key_list_name operandnum value
+
+  189 lset_stmt: LSET key_list_name operandnum value
+
+  190 ltrim_stmt: LTRIM key_list_name operandnum operandnum
+
+  191 rpop_stmt: RPOP key_list_name
+
+  192 rpoplpush_stmt: RPOPLPUSH key_list_name key_list_name
+
+  193 rpush_stmt: RPUSH key_list_name value_list
+
+  194 rpushx_stmt: RPUSHX key_list_name value
+
+  195 sadd_stmt: SADD key_set_name smember_name_list
+
+  196 scard_stmt: SCARD key_set_name
+
+  197 sdiff_stmt: SDIFF key_set_list
+
+  198 sdiffstore_stmt: SDIFFSTORE key_set_list
+
+  199 sinter_stmt: SINTER key_set_list
+
+  200 sinterstore_stmt: SINTERSTORE key_set_list
+
+  201 sismember_stmt: SISMEMBER key_set_name smember_name
+
+  202 smember_stmt: SMEMBERS key_set_name
+
+  203 smove_stmt: SMOVE key_set_name key_set_name smember_name
+
+  204 spop_stmt: SPOP key_set_name
+
+  205 srandmember_stmt: SRANDMEMBER key_set_name operandnum
+
+  206 srem_stmt: SREM key_set_name del_key_set_list
+
+  207 sunion_stmt: SUNION key_set_list
+
+  208 sunionstore_stmt: SUNIONSTORE key_set_list
+
+  209 zadd_stmt: ZADD key_zset_name zmember_value_list
+
+  210 zcard_stmt: ZCARD key_zset_name
+
+  211 zcount_stmt: ZCOUNT key_zset_name operandnum operandnum
+
+  212 zincrby_stmt: ZINCRBY key_zset_name operandnum zmember_name
+
+  213 zrange_stmt: ZRANGE key_zset_name operandnum operandnum opt_zrange_behavior
+
+  214 opt_zrange_behavior: WITHSCORES
+  215                    | %empty
+
+  216 zrangebyscore_stmt: zrangebyscore_clause opt_limit_clause
+
+  217 zrangebyscore_clause: ZRANGEBYSCORE key_zset_name operandnum operandnum
+
+  218 zrank_stmt: ZRANK key_zset_name zmember_name
+
+  219 zrem_stmt: ZREM key_zset_name zmember_name_list
+
+  220 zscore_stmt: ZSCORE key_zset_name zmember_name
+
+  221 zunionstore_stmt: zunionstore_clause opt_weight_clause opt_aggregate_clause
+
+  222 zunionstore_clause: ZUNIONSTORE key_zset_name operandnum key_zset_list
+
+  223 opt_weight_clause: WEIGHTS operandnum_list
+  224                  | %empty
+
+  225 opt_aggregate_clause: AGGREGATE SUM
+  226                     | AGGREGATE MIN
+  227                     | AGGREGATE MAX
+  228                     | %empty
+
+  229 zinterstore_stmt: zinterstore_clause opt_weight_clause opt_aggregate_clause
+
+  230 zinterstore_clause: ZINTERSTORE key_zset_name operandnum key_zset_list
+
+  231 select_stmt: SELECT operandnum
+
+  232 key_list: keyname
+  233         | keyname key_list
+
+  234 keyname: identifier
+
+  235 value: literal
+
+  236 value_list: value
+  237           | value value_list
+
+  238 key_string_name: identifier
+
+  239 key_string_list: key_string_name
+  240                | key_string_name key_string_list
+
+  241 key_string_value_list: key_string_value
+  242                      | key_string_value key_string_value_list
+
+  243 key_string_value: key_string_name value
+
+  244 key_hash_name: identifier
+
+  245 field_name: identifier
+
+  246 del_field_list: field_name
+  247               | field_name field_list
+
+  248 field_list: field_name
+  249           | field_name field_list
+
+  250 field_value: field_name value
+
+  251 field_value_list: field_value
+  252                 | field_value field_value_list
+
+  253 key_list_name: identifier
+
+  254 key_set_name: identifier
+
+  255 del_key_set_list: key_set_name
+  256                 | key_set_name del_key_set_list
+
+  257 key_set_list: key_set_name
+  258             | key_set_name key_set_list
+
+  259 smember_name: identifier
+
+  260 smember_name_list: smember_name
+  261                  | smember_name smember_name_list
+
+  262 key_zset_name: identifier
+
+  263 key_zset_list: key_zset_name
+  264              | key_zset_name key_zset_list
+
+  265 zmember_name: identifier
+
+  266 zmember_name_list: zmember_name
+  267                  | zmember_name zmember_name_list
+
+  268 zmember_value: value zmember_name
+
+  269 zmember_value_list: zmember_value
+  270                   | zmember_value zmember_value_list
+
+  271 timesecond: literal
+
+  272 timeunix: literal
+
+  273 operandnum: int_literal
+
+  274 operandnum_list: operandnum
+  275                | operandnum operandnum_list
+
+  276 identifier: IDENTIFIER
+
+  277 literal: string_literal
+  278        | num_literal
+
+  279 string_literal: STRINGLITERAL
+
+  280 num_literal: int_literal
+  281            | float_literal
+
+  282 int_literal: INTLITERAL
+
+  283 float_literal: FLOATLITERAL
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    DEL (258) 102
+    DUMP (259) 103
+    EXISTS (260) 104
+    EXPIRE (261) 105
+    EXPIREAT (262) 106
+    KEYS (263)
+    MIGRATE (264)
+    COPY (265)
+    REPLACE (266)
+    MOVE (267) 107
+    OBJECT (268) 108
+    REFCOUNT (269) 109
+    ENCODING (270) 110
+    IDLETIME (271) 111
+    PERSIST (272) 112
+    PEXPIRE (273) 113
+    PEXPIREAT (274) 114
+    PTTL (275) 115
+    RANDOMKEY (276) 116
+    RENAME (277) 117
+    RENAMENX (278) 118
+    RESTORE (279)
+    SORT (280) 121
+    GET (281) 144
+    STORE (282) 126
+    TTL (283) 132
+    TYPE (284) 133
+    APPEND (285) 134
+    BITCOUNT (286) 135
+    BITOP (287) 137
+    DECR (288) 142
+    DECRBY (289) 143
+    GETBIT (290) 145
+    GETRANGE (291) 146
+    GETSET (292) 147
+    INCR (293) 148
+    INCRBY (294) 149
+    INCRBYFLOAT (295) 150
+    MGET (296) 151
+    MSET (297) 152
+    MSETNX (298)
+    PSETEX (299) 153
+    SET (300) 154
+    AND (301) 138
+    OR (302) 139
+    XOR (303) 140
+    NOT (304) 141
+    BY (305) 122
+    LIMIT (306) 124
+    ASC (307) 128
+    DESC (308) 129
+    ALPHA (309) 130
+    EX (310) 156
+    PX (311) 157
+    NX (312) 159
+    XX (313) 160
+    SETBIT (314) 136
+    SETEX (315) 162
+    SETNX (316) 163
+    SETRANGE (317) 164
+    STRLEN (318) 165
+    BEFORE (319) 181
+    AFTER (320) 182
+    SUM (321) 225
+    MIN (322) 226
+    MAX (323) 227
+    HDEL (324) 166
+    HEXISTS (325) 167
+    HGET (326) 168
+    HGETALL (327) 169
+    HINCRBY (328) 170
+    HINCRBYFLOAT (329) 171
+    HKEYS (330) 172
+    HLEN (331) 173
+    HMGET (332) 174
+    HMSET (333) 175
+    HSET (334) 176
+    HSETNX (335) 177
+    HVALS (336) 178
+    LINDEX (337) 179
+    LINSERT (338) 180
+    LLEN (339) 183
+    LPOP (340) 184
+    LPUSH (341) 185
+    LPUSHX (342) 186
+    LRANGE (343) 187
+    LREM (344) 188
+    LSET (345) 189
+    LTRIM (346) 190
+    RPOP (347) 191
+    RPOPLPUSH (348) 192
+    RPUSH (349) 193
+    RPUSHX (350) 194
+    SADD (351) 195
+    SCARD (352) 196
+    SDIFF (353) 197
+    SDIFFSTORE (354) 198
+    SINTER (355) 199
+    SINTERSTORE (356) 200
+    SISMEMBER (357) 201
+    SMEMBERS (358) 202
+    SMOVE (359) 203
+    SPOP (360) 204
+    SRANDMEMBER (361) 205
+    SREM (362) 206
+    SUNION (363) 207
+    SUNIONSTORE (364) 208
+    ZADD (365) 209
+    ZCARD (366) 210
+    ZCOUNT (367) 211
+    ZINCRBY (368) 212
+    ZRANGE (369) 213
+    WITHSCORES (370) 214
+    ZRANGEBYSCORE (371) 217
+    ZRANK (372) 218
+    ZREM (373) 219
+    ZREMRANGEBYRANK (374)
+    ZREMRANGEBYSCORE (375)
+    ZREVRANGE (376)
+    ZREVRANGEBYSCORE (377)
+    ZREVRANK (378)
+    ZSCORE (379) 220
+    ZUNIONSTORE (380) 222
+    WEIGHTS (381) 223
+    AGGREGATE (382) 225 226 227
+    ZINTERSTORE (383) 230
+    SELECT (384) 231
+    INTLITERAL <ival> (385) 282
+    FLOATLITERAL <fval> (386) 283
+    IDENTIFIER <sval> (387) 276
+    STRINGLITERAL <sval> (388) 279
+    OP_NOTEQUAL (389)
+    MATCH (390)
+    LIKE (391)
+    OP_EQUAL (392)
+    OP_GREATERTHAN (393)
+    OP_LESSTHAN (394)
+    OP_GREATEREQ (395)
+    OP_LESSEQ (396)
+    ISNULL (397)
+    IS (398)
+    OP_ADD (399)
+    OP_SUB (400)
+    OP_MUL (401)
+    OP_MOD (402)
+    OP_DIVIDE (403)
+    OP_XOR (404)
+    UMINUS (405)
+    OP_LBRACKET (406)
+    OP_RBRACKET (407)
+    OP_RP (408)
+    OP_LP (409)
+    JOIN (410)
+    ON (411)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (157)
+        on left: 0
+    program <program_t> (158)
+        on left: 1
+        on right: 0
+    stmtlist <stmtlist_t> (159)
+        on left: 2 3
+        on right: 1 3
+    stmt <stmt_t> (160)
+        on left: 4 5 6 7 8 9 10
+        on right: 2 3
+    key_stmt <key_stmt_t> (161)
+        on left: 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
+        on right: 4
+    string_stmt <string_stmt_t> (162)
+        on left: 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48
+        on right: 5
+    hash_stmt <hash_stmt_t> (163)
+        on left: 49 50 51 52 53 54 55 56 57 58 59 60 61
+        on right: 6
+    list_stmt <list_stmt_t> (164)
+        on left: 62 63 64 65 66 67 68 69 70 71 72 73 74 75
+        on right: 7
+    set_stmt <set_stmt_t> (165)
+        on left: 76 77 78 79 80 81 82 83 84 85 86 87 88 89
+        on right: 8
+    zset_stmt <zset_stmt_t> (166)
+        on left: 90 91 92 93 94 95 96 97 98 99 100
+        on right: 9
+    connect_stmt <connect_stmt_t> (167)
+        on left: 101
+        on right: 10
+    del_stmt <del_stmt_t> (168)
+        on left: 102
+        on right: 11
+    dump_stmt <dump_stmt_t> (169)
+        on left: 103
+        on right: 12
+    exists_stmt <exists_stmt_t> (170)
+        on left: 104
+        on right: 13
+    expire_stmt <expire_stmt_t> (171)
+        on left: 105
+        on right: 14
+    expireat_stmt <expireat_stmt_t> (172)
+        on left: 106
+        on right: 15
+    move_stmt <move_stmt_t> (173)
+        on left: 107
+        on right: 16
+    object_stmt <object_stmt_t> (174)
+        on left: 108
+        on right: 17
+    objoption <objoption_t> (175)
+        on left: 109 110 111
+        on right: 108
+    persist_stmt <persist_stmt_t> (176)
+        on left: 112
+        on right: 18
+    pexpire_stmt <pexpire_stmt_t> (177)
+        on left: 113
+        on right: 19
+    pexpireat_stmt <pexpireat_stmt_t> (178)
+        on left: 114
+        on right: 20
+    pttl_stmt <pttl_stmt_t> (179)
+        on left: 115
+        on right: 21
+    randomkey_stmt <randomkey_stmt_t> (180)
+        on left: 116
+        on right: 22
+    rename_stmt <rename_stmt_t> (181)
+        on left: 117
+        on right: 23
+    renamenx_stmt <renamenx_stmt_t> (182)
+        on left: 118
+        on right: 24
+    aliasname <aliasname_t> (183)
+        on left: 119
+        on right: 117 118
+    sort_stmt <sort_stmt_t> (184)
+        on left: 120
+        on right: 25
+    sort_clause <sort_clause_t> (185)
+        on left: 121
+        on right: 120
+    opt_by_clause <opt_by_clause_t> (186)
+        on left: 122 123
+        on right: 120
+    opt_limit_clause <opt_limit_clause_t> (187)
+        on left: 124 125
+        on right: 120 216
+    opt_store_clause <opt_store_clause_t> (188)
+        on left: 126 127
+        on right: 120
+    opt_sort_behavior <opt_sort_behavior_t> (189)
+        on left: 128 129 130 131
+        on right: 120
+    ttl_stmt <ttl_stmt_t> (190)
+        on left: 132
+        on right: 26
+    type_stmt <type_stmt_t> (191)
+        on left: 133
+        on right: 27
+    append_stmt <append_stmt_t> (192)
+        on left: 134
+        on right: 28
+    bicount_stmt <bicount_stmt_t> (193)
+        on left: 135
+        on right: 29
+    setbit_stmt <setbit_stmt_t> (194)
+        on left: 136
+        on right: 30
+    bitop_stmt <bitop_stmt_t> (195)
+        on left: 137
+        on right: 31
+    operation <operation_t> (196)
+        on left: 138 139 140 141
+        on right: 137
+    decr_stmt <decr_stmt_t> (197)
+        on left: 142
+        on right: 32
+    decrby_stmt <decrby_stmt_t> (198)
+        on left: 143
+        on right: 33
+    get_stmt <get_stmt_t> (199)
+        on left: 144
+        on right: 34
+    getbit_stmt <getbit_stmt_t> (200)
+        on left: 145
+        on right: 35
+    getrange_stmt <getrange_stmt_t> (201)
+        on left: 146
+        on right: 36
+    getset_stmt <getset_stmt_t> (202)
+        on left: 147
+        on right: 37
+    incr_stmt <incr_stmt_t> (203)
+        on left: 148
+        on right: 38
+    incrby_stmt <incrby_stmt_t> (204)
+        on left: 149
+        on right: 39
+    incrbyfloat_stmt <incrbyfloat_stmt_t> (205)
+        on left: 150
+        on right: 40
+    mget_stmt <mget_stmt_t> (206)
+        on left: 151
+        on right: 41
+    mset_stmt <mset_stmt_t> (207)
+        on left: 152
+        on right: 42
+    psetex_stmt <psetex_stmt_t> (208)
+        on left: 153
+        on right: 43
+    setkey_stmt <setkey_stmt_t> (209)
+        on left: 154
+        on right: 44
+    setkey_clause <setkey_clause_t> (210)
+        on left: 155
+        on right: 154
+    opt_expiretime_clause <opt_expiretime_clause_t> (211)
+        on left: 156 157 158
+        on right: 154
+    opt_setkey_behavior <opt_setkey_behavior_t> (212)
+        on left: 159 160 161
+        on right: 154
+    setex_stmt <setex_stmt_t> (213)
+        on left: 162
+        on right: 45
+    setnx_stmt <setnx_stmt_t> (214)
+        on left: 163
+        on right: 46
+    setrange_stmt <setrange_stmt_t> (215)
+        on left: 164
+        on right: 47
+    strlen_stmt <strlen_stmt_t> (216)
+        on left: 165
+        on right: 48
+    hdel_stmt <hdel_stmt_t> (217)
+        on left: 166
+        on right: 49
+    hexists_stmt <hexists_stmt_t> (218)
+        on left: 167
+        on right: 50
+    hget_stmt <hget_stmt_t> (219)
+        on left: 168
+        on right: 51
+    hgetall_stmt <hgetall_stmt_t> (220)
+        on left: 169
+        on right: 52
+    hincrby_stmt <hincrby_stmt_t> (221)
+        on left: 170
+        on right: 53
+    hincrbyfloat_stmt <hincrbyfloat_stmt_t> (222)
+        on left: 171
+        on right: 54
+    hkeys_stmt <hkeys_stmt_t> (223)
+        on left: 172
+        on right: 55
+    hlen_stmt <hlen_stmt_t> (224)
+        on left: 173
+        on right: 56
+    hmget_stmt <hmget_stmt_t> (225)
+        on left: 174
+        on right: 57
+    hmset_stmt <hmset_stmt_t> (226)
+        on left: 175
+        on right: 58
+    hset_stmt <hset_stmt_t> (227)
+        on left: 176
+        on right: 59
+    hsetnx_stmt <hsetnx_stmt_t> (228)
+        on left: 177
+        on right: 60
+    hvals_stmt <hvals_stmt_t> (229)
+        on left: 178
+        on right: 61
+    lindex_stmt <lindex_stmt_t> (230)
+        on left: 179
+        on right: 62
+    linsert_stmt <linsert_stmt_t> (231)
+        on left: 180
+        on right: 63
+    opt_linsert_behavior <opt_linsert_behavior_t> (232)
+        on left: 181 182
+        on right: 180
+    llen_stmt <llen_stmt_t> (233)
+        on left: 183
+        on right: 64
+    lpop_stmt <lpop_stmt_t> (234)
+        on left: 184
+        on right: 65
+    lpush_stmt <lpush_stmt_t> (235)
+        on left: 185
+        on right: 66
+    lpushx_stmt <lpushx_stmt_t> (236)
+        on left: 186
+        on right: 67
+    lrange_stmt <lrange_stmt_t> (237)
+        on left: 187
+        on right: 68
+    lrem_stmt <lrem_stmt_t> (238)
+        on left: 188
+        on right: 69
+    lset_stmt <lset_stmt_t> (239)
+        on left: 189
+        on right: 70
+    ltrim_stmt <ltrim_stmt_t> (240)
+        on left: 190
+        on right: 71
+    rpop_stmt <rpop_stmt_t> (241)
+        on left: 191
+        on right: 72
+    rpoplpush_stmt <rpoplpush_stmt_t> (242)
+        on left: 192
+        on right: 73
+    rpush_stmt <rpush_stmt_t> (243)
+        on left: 193
+        on right: 74
+    rpushx_stmt <rpushx_stmt_t> (244)
+        on left: 194
+        on right: 75
+    sadd_stmt <sadd_stmt_t> (245)
+        on left: 195
+        on right: 76
+    scard_stmt <scard_stmt_t> (246)
+        on left: 196
+        on right: 77
+    sdiff_stmt <sdiff_stmt_t> (247)
+        on left: 197
+        on right: 78
+    sdiffstore_stmt <sdiffstore_stmt_t> (248)
+        on left: 198
+        on right: 79
+    sinter_stmt <sinter_stmt_t> (249)
+        on left: 199
+        on right: 80
+    sinterstore_stmt <sinterstore_stmt_t> (250)
+        on left: 200
+        on right: 81
+    sismember_stmt <sismember_stmt_t> (251)
+        on left: 201
+        on right: 82
+    smember_stmt <smember_stmt_t> (252)
+        on left: 202
+        on right: 83
+    smove_stmt <smove_stmt_t> (253)
+        on left: 203
+        on right: 84
+    spop_stmt <spop_stmt_t> (254)
+        on left: 204
+        on right: 85
+    srandmember_stmt <srandmember_stmt_t> (255)
+        on left: 205
+        on right: 86
+    srem_stmt <srem_stmt_t> (256)
+        on left: 206
+        on right: 87
+    sunion_stmt <sunion_stmt_t> (257)
+        on left: 207
+        on right: 88
+    sunionstore_stmt <sunionstore_stmt_t> (258)
+        on left: 208
+        on right: 89
+    zadd_stmt <zadd_stmt_t> (259)
+        on left: 209
+        on right: 90
+    zcard_stmt <zcard_stmt_t> (260)
+        on left: 210
+        on right: 91
+    zcount_stmt <zcount_stmt_t> (261)
+        on left: 211
+        on right: 92
+    zincrby_stmt <zincrby_stmt_t> (262)
+        on left: 212
+        on right: 93
+    zrange_stmt <zrange_stmt_t> (263)
+        on left: 213
+        on right: 94
+    opt_zrange_behavior <opt_zrange_behavior_t> (264)
+        on left: 214 215
+        on right: 213
+    zrangebyscore_stmt <zrangebyscore_stmt_t> (265)
+        on left: 216
+        on right: 95
+    zrangebyscore_clause <zrangebyscore_clause_t> (266)
+        on left: 217
+        on right: 216
+    zrank_stmt <zrank_stmt_t> (267)
+        on left: 218
+        on right: 96
+    zrem_stmt <zrem_stmt_t> (268)
+        on left: 219
+        on right: 97
+    zscore_stmt <zscore_stmt_t> (269)
+        on left: 220
+        on right: 98
+    zunionstore_stmt <zunionstore_stmt_t> (270)
+        on left: 221
+        on right: 99
+    zunionstore_clause <zunionstore_clause_t> (271)
+        on left: 222
+        on right: 221
+    opt_weight_clause <opt_weight_clause_t> (272)
+        on left: 223 224
+        on right: 221 229
+    opt_aggregate_clause <opt_aggregate_clause_t> (273)
+        on left: 225 226 227 228
+        on right: 221 229
+    zinterstore_stmt <zinterstore_stmt_t> (274)
+        on left: 229
+        on right: 100
+    zinterstore_clause <zinterstore_clause_t> (275)
+        on left: 230
+        on right: 229
+    select_stmt <select_stmt_t> (276)
+        on left: 231
+        on right: 101
+    key_list <key_list_t> (277)
+        on left: 232 233
+        on right: 102 233
+    keyname <keyname_t> (278)
+        on left: 234
+        on right: 103 104 105 106 107 108 112 113 114 115 117 118 121 122 126 132 133 232 233
+    value <value_t> (279)
+        on left: 235
+        on right: 134 136 147 153 155 162 163 164 180 186 188 189 194 236 237 243 250 268
+    value_list <value_list_t> (280)
+        on left: 236 237
+        on right: 185 193 237
+    key_string_name <key_string_name_t> (281)
+        on left: 238
+        on right: 134 135 136 142 143 144 145 146 147 148 149 150 153 155 162 163 164 165 239 240 243
+    key_string_list <key_string_list_t> (282)
+        on left: 239 240
+        on right: 137 151 240
+    key_string_value_list <key_string_value_list_t> (283)
+        on left: 241 242
+        on right: 152 242
+    key_string_value <key_string_value_t> (284)
+        on left: 243
+        on right: 241 242
+    key_hash_name <key_hash_name_t> (285)
+        on left: 244
+        on right: 166 167 168 169 170 171 172 173 174 175 176 177 178
+    field_name <field_name_t> (286)
+        on left: 245
+        on right: 167 168 170 171 246 247 248 249 250
+    del_field_list <del_field_list_t> (287)
+        on left: 246 247
+        on right: 166
+    field_list <field_list_t> (288)
+        on left: 248 249
+        on right: 174 247 249
+    field_value <field_value_t> (289)
+        on left: 250
+        on right: 176 177 251 252
+    field_value_list <field_value_list_t> (290)
+        on left: 251 252
+        on right: 175 252
+    key_list_name <key_list_name_t> (291)
+        on left: 253
+        on right: 179 180 183 184 185 186 187 188 189 190 191 192 193 194
+    key_set_name <key_set_name_t> (292)
+        on left: 254
+        on right: 195 196 201 202 203 204 205 206 255 256 257 258
+    del_key_set_list <del_key_set_list_t> (293)
+        on left: 255 256
+        on right: 206 256
+    key_set_list <key_set_list_t> (294)
+        on left: 257 258
+        on right: 197 198 199 200 207 208 258
+    smember_name <smember_name_t> (295)
+        on left: 259
+        on right: 201 203 260 261
+    smember_name_list <smember_name_list_t> (296)
+        on left: 260 261
+        on right: 195 261
+    key_zset_name <key_zset_name_t> (297)
+        on left: 262
+        on right: 209 210 211 212 213 217 218 219 220 222 230 263 264
+    key_zset_list <key_zset_list_t> (298)
+        on left: 263 264
+        on right: 222 230 264
+    zmember_name <zmember_name_t> (299)
+        on left: 265
+        on right: 212 218 220 266 267 268
+    zmember_name_list <zmember_name_list_t> (300)
+        on left: 266 267
+        on right: 219 267
+    zmember_value <zmember_value_t> (301)
+        on left: 268
+        on right: 269 270
+    zmember_value_list <zmember_value_list_t> (302)
+        on left: 269 270
+        on right: 209 270
+    timesecond <timesecond_t> (303)
+        on left: 271
+        on right: 105 113 114 153 156 157 162
+    timeunix <timeunix_t> (304)
+        on left: 272
+        on right: 106
+    operandnum <operandnum_t> (305)
+        on left: 273
+        on right: 107 124 136 145 146 164 179 187 188 189 190 205 211 212 213 217 222 230 231 274 275
+    operandnum_list <operandnum_list_t> (306)
+        on left: 274 275
+        on right: 223 275
+    identifier <identifier_t> (307)
+        on left: 276
+        on right: 119 234 238 244 245 253 254 259 262 265
+    literal <literal_t> (308)
+        on left: 277 278
+        on right: 235 271 272
+    string_literal <string_literal_t> (309)
+        on left: 279
+        on right: 277
+    num_literal <num_literal_t> (310)
+        on left: 280 281
+        on right: 143 149 170 278
+    int_literal <int_literal_t> (311)
+        on left: 282
+        on right: 273 280
+    float_literal <float_literal_t> (312)
+        on left: 283
+        on right: 150 171 281
+
+
+State 0
+
+    0 $accept: . program $end
+
+    DEL            shift, and go to state 1
+    DUMP           shift, and go to state 2
+    EXISTS         shift, and go to state 3
+    EXPIRE         shift, and go to state 4
+    EXPIREAT       shift, and go to state 5
+    MOVE           shift, and go to state 6
+    OBJECT         shift, and go to state 7
+    PERSIST        shift, and go to state 8
+    PEXPIRE        shift, and go to state 9
+    PEXPIREAT      shift, and go to state 10
+    PTTL           shift, and go to state 11
+    RANDOMKEY      shift, and go to state 12
+    RENAME         shift, and go to state 13
+    RENAMENX       shift, and go to state 14
+    SORT           shift, and go to state 15
+    GET            shift, and go to state 16
+    TTL            shift, and go to state 17
+    TYPE           shift, and go to state 18
+    APPEND         shift, and go to state 19
+    BITCOUNT       shift, and go to state 20
+    BITOP          shift, and go to state 21
+    DECR           shift, and go to state 22
+    DECRBY         shift, and go to state 23
+    GETBIT         shift, and go to state 24
+    GETRANGE       shift, and go to state 25
+    GETSET         shift, and go to state 26
+    INCR           shift, and go to state 27
+    INCRBY         shift, and go to state 28
+    INCRBYFLOAT    shift, and go to state 29
+    MGET           shift, and go to state 30
+    MSET           shift, and go to state 31
+    PSETEX         shift, and go to state 32
+    SET            shift, and go to state 33
+    SETBIT         shift, and go to state 34
+    SETEX          shift, and go to state 35
+    SETNX          shift, and go to state 36
+    SETRANGE       shift, and go to state 37
+    STRLEN         shift, and go to state 38
+    HDEL           shift, and go to state 39
+    HEXISTS        shift, and go to state 40
+    HGET           shift, and go to state 41
+    HGETALL        shift, and go to state 42
+    HINCRBY        shift, and go to state 43
+    HINCRBYFLOAT   shift, and go to state 44
+    HKEYS          shift, and go to state 45
+    HLEN           shift, and go to state 46
+    HMGET          shift, and go to state 47
+    HMSET          shift, and go to state 48
+    HSET           shift, and go to state 49
+    HSETNX         shift, and go to state 50
+    HVALS          shift, and go to state 51
+    LINDEX         shift, and go to state 52
+    LINSERT        shift, and go to state 53
+    LLEN           shift, and go to state 54
+    LPOP           shift, and go to state 55
+    LPUSH          shift, and go to state 56
+    LPUSHX         shift, and go to state 57
+    LRANGE         shift, and go to state 58
+    LREM           shift, and go to state 59
+    LSET           shift, and go to state 60
+    LTRIM          shift, and go to state 61
+    RPOP           shift, and go to state 62
+    RPOPLPUSH      shift, and go to state 63
+    RPUSH          shift, and go to state 64
+    RPUSHX         shift, and go to state 65
+    SADD           shift, and go to state 66
+    SCARD          shift, and go to state 67
+    SDIFF          shift, and go to state 68
+    SDIFFSTORE     shift, and go to state 69
+    SINTER         shift, and go to state 70
+    SINTERSTORE    shift, and go to state 71
+    SISMEMBER      shift, and go to state 72
+    SMEMBERS       shift, and go to state 73
+    SMOVE          shift, and go to state 74
+    SPOP           shift, and go to state 75
+    SRANDMEMBER    shift, and go to state 76
+    SREM           shift, and go to state 77
+    SUNION         shift, and go to state 78
+    SUNIONSTORE    shift, and go to state 79
+    ZADD           shift, and go to state 80
+    ZCARD          shift, and go to state 81
+    ZCOUNT         shift, and go to state 82
+    ZINCRBY        shift, and go to state 83
+    ZRANGE         shift, and go to state 84
+    ZRANGEBYSCORE  shift, and go to state 85
+    ZRANK          shift, and go to state 86
+    ZREM           shift, and go to state 87
+    ZSCORE         shift, and go to state 88
+    ZUNIONSTORE    shift, and go to state 89
+    ZINTERSTORE    shift, and go to state 90
+    SELECT         shift, and go to state 91
+
+    program               go to state 92
+    stmtlist              go to state 93
+    stmt                  go to state 94
+    key_stmt              go to state 95
+    string_stmt           go to state 96
+    hash_stmt             go to state 97
+    list_stmt             go to state 98
+    set_stmt              go to state 99
+    zset_stmt             go to state 100
+    connect_stmt          go to state 101
+    del_stmt              go to state 102
+    dump_stmt             go to state 103
+    exists_stmt           go to state 104
+    expire_stmt           go to state 105
+    expireat_stmt         go to state 106
+    move_stmt             go to state 107
+    object_stmt           go to state 108
+    persist_stmt          go to state 109
+    pexpire_stmt          go to state 110
+    pexpireat_stmt        go to state 111
+    pttl_stmt             go to state 112
+    randomkey_stmt        go to state 113
+    rename_stmt           go to state 114
+    renamenx_stmt         go to state 115
+    sort_stmt             go to state 116
+    sort_clause           go to state 117
+    ttl_stmt              go to state 118
+    type_stmt             go to state 119
+    append_stmt           go to state 120
+    bicount_stmt          go to state 121
+    setbit_stmt           go to state 122
+    bitop_stmt            go to state 123
+    decr_stmt             go to state 124
+    decrby_stmt           go to state 125
+    get_stmt              go to state 126
+    getbit_stmt           go to state 127
+    getrange_stmt         go to state 128
+    getset_stmt           go to state 129
+    incr_stmt             go to state 130
+    incrby_stmt           go to state 131
+    incrbyfloat_stmt      go to state 132
+    mget_stmt             go to state 133
+    mset_stmt             go to state 134
+    psetex_stmt           go to state 135
+    setkey_stmt           go to state 136
+    setex_stmt            go to state 137
+    setnx_stmt            go to state 138
+    setrange_stmt         go to state 139
+    strlen_stmt           go to state 140
+    hdel_stmt             go to state 141
+    hexists_stmt          go to state 142
+    hget_stmt             go to state 143
+    hgetall_stmt          go to state 144
+    hincrby_stmt          go to state 145
+    hincrbyfloat_stmt     go to state 146
+    hkeys_stmt            go to state 147
+    hlen_stmt             go to state 148
+    hmget_stmt            go to state 149
+    hmset_stmt            go to state 150
+    hset_stmt             go to state 151
+    hsetnx_stmt           go to state 152
+    hvals_stmt            go to state 153
+    lindex_stmt           go to state 154
+    linsert_stmt          go to state 155
+    llen_stmt             go to state 156
+    lpop_stmt             go to state 157
+    lpush_stmt            go to state 158
+    lpushx_stmt           go to state 159
+    lrange_stmt           go to state 160
+    lrem_stmt             go to state 161
+    lset_stmt             go to state 162
+    ltrim_stmt            go to state 163
+    rpop_stmt             go to state 164
+    rpoplpush_stmt        go to state 165
+    rpush_stmt            go to state 166
+    rpushx_stmt           go to state 167
+    sadd_stmt             go to state 168
+    scard_stmt            go to state 169
+    sdiff_stmt            go to state 170
+    sdiffstore_stmt       go to state 171
+    sinter_stmt           go to state 172
+    sinterstore_stmt      go to state 173
+    sismember_stmt        go to state 174
+    smember_stmt          go to state 175
+    smove_stmt            go to state 176
+    spop_stmt             go to state 177
+    srandmember_stmt      go to state 178
+    srem_stmt             go to state 179
+    sunion_stmt           go to state 180
+    sunionstore_stmt      go to state 181
+    zadd_stmt             go to state 182
+    zcard_stmt            go to state 183
+    zcount_stmt           go to state 184
+    zincrby_stmt          go to state 185
+    zrange_stmt           go to state 186
+    zrangebyscore_stmt    go to state 187
+    zrangebyscore_clause  go to state 188
+    zrank_stmt            go to state 189
+    zrem_stmt             go to state 190
+    zscore_stmt           go to state 191
+    zunionstore_stmt      go to state 192
+    zunionstore_clause    go to state 193
+    zinterstore_stmt      go to state 194
+    zinterstore_clause    go to state 195
+    select_stmt           go to state 196
+
+
+State 1
+
+  102 del_stmt: DEL . key_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list    go to state 198
+    keyname     go to state 199
+    identifier  go to state 200
+
+
+State 2
+
+  103 dump_stmt: DUMP . keyname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 201
+    identifier  go to state 200
+
+
+State 3
+
+  104 exists_stmt: EXISTS . keyname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 202
+    identifier  go to state 200
+
+
+State 4
+
+  105 expire_stmt: EXPIRE . keyname timesecond
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 203
+    identifier  go to state 200
+
+
+State 5
+
+  106 expireat_stmt: EXPIREAT . keyname timeunix
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 204
+    identifier  go to state 200
+
+
+State 6
+
+  107 move_stmt: MOVE . keyname operandnum
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 205
+    identifier  go to state 200
+
+
+State 7
+
+  108 object_stmt: OBJECT . objoption keyname
+
+    REFCOUNT  shift, and go to state 206
+    ENCODING  shift, and go to state 207
+    IDLETIME  shift, and go to state 208
+
+    objoption  go to state 209
+
+
+State 8
+
+  112 persist_stmt: PERSIST . keyname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 210
+    identifier  go to state 200
+
+
+State 9
+
+  113 pexpire_stmt: PEXPIRE . keyname timesecond
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 211
+    identifier  go to state 200
+
+
+State 10
+
+  114 pexpireat_stmt: PEXPIREAT . keyname timesecond
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 212
+    identifier  go to state 200
+
+
+State 11
+
+  115 pttl_stmt: PTTL . keyname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 213
+    identifier  go to state 200
+
+
+State 12
+
+  116 randomkey_stmt: RANDOMKEY .
+
+    $default  reduce using rule 116 (randomkey_stmt)
+
+
+State 13
+
+  117 rename_stmt: RENAME . keyname aliasname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 214
+    identifier  go to state 200
+
+
+State 14
+
+  118 renamenx_stmt: RENAMENX . keyname aliasname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 215
+    identifier  go to state 200
+
+
+State 15
+
+  121 sort_clause: SORT . keyname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 216
+    identifier  go to state 200
+
+
+State 16
+
+  144 get_stmt: GET . key_string_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 217
+    identifier       go to state 218
+
+
+State 17
+
+  132 ttl_stmt: TTL . keyname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 219
+    identifier  go to state 200
+
+
+State 18
+
+  133 type_stmt: TYPE . keyname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 220
+    identifier  go to state 200
+
+
+State 19
+
+  134 append_stmt: APPEND . key_string_name value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 221
+    identifier       go to state 218
+
+
+State 20
+
+  135 bicount_stmt: BITCOUNT . key_string_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 222
+    identifier       go to state 218
+
+
+State 21
+
+  137 bitop_stmt: BITOP . operation key_string_list
+
+    AND  shift, and go to state 223
+    OR   shift, and go to state 224
+    XOR  shift, and go to state 225
+    NOT  shift, and go to state 226
+
+    operation  go to state 227
+
+
+State 22
+
+  142 decr_stmt: DECR . key_string_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 228
+    identifier       go to state 218
+
+
+State 23
+
+  143 decrby_stmt: DECRBY . key_string_name num_literal
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 229
+    identifier       go to state 218
+
+
+State 24
+
+  145 getbit_stmt: GETBIT . key_string_name operandnum
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 230
+    identifier       go to state 218
+
+
+State 25
+
+  146 getrange_stmt: GETRANGE . key_string_name operandnum operandnum
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 231
+    identifier       go to state 218
+
+
+State 26
+
+  147 getset_stmt: GETSET . key_string_name value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 232
+    identifier       go to state 218
+
+
+State 27
+
+  148 incr_stmt: INCR . key_string_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 233
+    identifier       go to state 218
+
+
+State 28
+
+  149 incrby_stmt: INCRBY . key_string_name num_literal
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 234
+    identifier       go to state 218
+
+
+State 29
+
+  150 incrbyfloat_stmt: INCRBYFLOAT . key_string_name float_literal
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 235
+    identifier       go to state 218
+
+
+State 30
+
+  151 mget_stmt: MGET . key_string_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 236
+    key_string_list  go to state 237
+    identifier       go to state 218
+
+
+State 31
+
+  152 mset_stmt: MSET . key_string_value_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name        go to state 238
+    key_string_value_list  go to state 239
+    key_string_value       go to state 240
+    identifier             go to state 218
+
+
+State 32
+
+  153 psetex_stmt: PSETEX . key_string_name timesecond value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 241
+    identifier       go to state 218
+
+
+State 33
+
+  154 setkey_stmt: SET . setkey_clause opt_expiretime_clause opt_setkey_behavior
+
+    IDENTIFIER  shift, and go to state 197
+
+    setkey_clause    go to state 242
+    key_string_name  go to state 243
+    identifier       go to state 218
+
+
+State 34
+
+  136 setbit_stmt: SETBIT . key_string_name operandnum value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 244
+    identifier       go to state 218
+
+
+State 35
+
+  162 setex_stmt: SETEX . key_string_name timesecond value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 245
+    identifier       go to state 218
+
+
+State 36
+
+  163 setnx_stmt: SETNX . key_string_name value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 246
+    identifier       go to state 218
+
+
+State 37
+
+  164 setrange_stmt: SETRANGE . key_string_name operandnum value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 247
+    identifier       go to state 218
+
+
+State 38
+
+  165 strlen_stmt: STRLEN . key_string_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 248
+    identifier       go to state 218
+
+
+State 39
+
+  166 hdel_stmt: HDEL . key_hash_name del_field_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 249
+    identifier     go to state 250
+
+
+State 40
+
+  167 hexists_stmt: HEXISTS . key_hash_name field_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 251
+    identifier     go to state 250
+
+
+State 41
+
+  168 hget_stmt: HGET . key_hash_name field_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 252
+    identifier     go to state 250
+
+
+State 42
+
+  169 hgetall_stmt: HGETALL . key_hash_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 253
+    identifier     go to state 250
+
+
+State 43
+
+  170 hincrby_stmt: HINCRBY . key_hash_name field_name num_literal
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 254
+    identifier     go to state 250
+
+
+State 44
+
+  171 hincrbyfloat_stmt: HINCRBYFLOAT . key_hash_name field_name float_literal
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 255
+    identifier     go to state 250
+
+
+State 45
+
+  172 hkeys_stmt: HKEYS . key_hash_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 256
+    identifier     go to state 250
+
+
+State 46
+
+  173 hlen_stmt: HLEN . key_hash_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 257
+    identifier     go to state 250
+
+
+State 47
+
+  174 hmget_stmt: HMGET . key_hash_name field_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 258
+    identifier     go to state 250
+
+
+State 48
+
+  175 hmset_stmt: HMSET . key_hash_name field_value_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 259
+    identifier     go to state 250
+
+
+State 49
+
+  176 hset_stmt: HSET . key_hash_name field_value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 260
+    identifier     go to state 250
+
+
+State 50
+
+  177 hsetnx_stmt: HSETNX . key_hash_name field_value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 261
+    identifier     go to state 250
+
+
+State 51
+
+  178 hvals_stmt: HVALS . key_hash_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_hash_name  go to state 262
+    identifier     go to state 250
+
+
+State 52
+
+  179 lindex_stmt: LINDEX . key_list_name operandnum
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 263
+    identifier     go to state 264
+
+
+State 53
+
+  180 linsert_stmt: LINSERT . key_list_name opt_linsert_behavior value value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 265
+    identifier     go to state 264
+
+
+State 54
+
+  183 llen_stmt: LLEN . key_list_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 266
+    identifier     go to state 264
+
+
+State 55
+
+  184 lpop_stmt: LPOP . key_list_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 267
+    identifier     go to state 264
+
+
+State 56
+
+  185 lpush_stmt: LPUSH . key_list_name value_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 268
+    identifier     go to state 264
+
+
+State 57
+
+  186 lpushx_stmt: LPUSHX . key_list_name value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 269
+    identifier     go to state 264
+
+
+State 58
+
+  187 lrange_stmt: LRANGE . key_list_name operandnum operandnum
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 270
+    identifier     go to state 264
+
+
+State 59
+
+  188 lrem_stmt: LREM . key_list_name operandnum value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 271
+    identifier     go to state 264
+
+
+State 60
+
+  189 lset_stmt: LSET . key_list_name operandnum value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 272
+    identifier     go to state 264
+
+
+State 61
+
+  190 ltrim_stmt: LTRIM . key_list_name operandnum operandnum
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 273
+    identifier     go to state 264
+
+
+State 62
+
+  191 rpop_stmt: RPOP . key_list_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 274
+    identifier     go to state 264
+
+
+State 63
+
+  192 rpoplpush_stmt: RPOPLPUSH . key_list_name key_list_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 275
+    identifier     go to state 264
+
+
+State 64
+
+  193 rpush_stmt: RPUSH . key_list_name value_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 276
+    identifier     go to state 264
+
+
+State 65
+
+  194 rpushx_stmt: RPUSHX . key_list_name value
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 277
+    identifier     go to state 264
+
+
+State 66
+
+  195 sadd_stmt: SADD . key_set_name smember_name_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 278
+    identifier    go to state 279
+
+
+State 67
+
+  196 scard_stmt: SCARD . key_set_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 280
+    identifier    go to state 279
+
+
+State 68
+
+  197 sdiff_stmt: SDIFF . key_set_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 281
+    key_set_list  go to state 282
+    identifier    go to state 279
+
+
+State 69
+
+  198 sdiffstore_stmt: SDIFFSTORE . key_set_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 281
+    key_set_list  go to state 283
+    identifier    go to state 279
+
+
+State 70
+
+  199 sinter_stmt: SINTER . key_set_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 281
+    key_set_list  go to state 284
+    identifier    go to state 279
+
+
+State 71
+
+  200 sinterstore_stmt: SINTERSTORE . key_set_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 281
+    key_set_list  go to state 285
+    identifier    go to state 279
+
+
+State 72
+
+  201 sismember_stmt: SISMEMBER . key_set_name smember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 286
+    identifier    go to state 279
+
+
+State 73
+
+  202 smember_stmt: SMEMBERS . key_set_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 287
+    identifier    go to state 279
+
+
+State 74
+
+  203 smove_stmt: SMOVE . key_set_name key_set_name smember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 288
+    identifier    go to state 279
+
+
+State 75
+
+  204 spop_stmt: SPOP . key_set_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 289
+    identifier    go to state 279
+
+
+State 76
+
+  205 srandmember_stmt: SRANDMEMBER . key_set_name operandnum
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 290
+    identifier    go to state 279
+
+
+State 77
+
+  206 srem_stmt: SREM . key_set_name del_key_set_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 291
+    identifier    go to state 279
+
+
+State 78
+
+  207 sunion_stmt: SUNION . key_set_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 281
+    key_set_list  go to state 292
+    identifier    go to state 279
+
+
+State 79
+
+  208 sunionstore_stmt: SUNIONSTORE . key_set_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 281
+    key_set_list  go to state 293
+    identifier    go to state 279
+
+
+State 80
+
+  209 zadd_stmt: ZADD . key_zset_name zmember_value_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 294
+    identifier     go to state 295
+
+
+State 81
+
+  210 zcard_stmt: ZCARD . key_zset_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 296
+    identifier     go to state 295
+
+
+State 82
+
+  211 zcount_stmt: ZCOUNT . key_zset_name operandnum operandnum
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 297
+    identifier     go to state 295
+
+
+State 83
+
+  212 zincrby_stmt: ZINCRBY . key_zset_name operandnum zmember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 298
+    identifier     go to state 295
+
+
+State 84
+
+  213 zrange_stmt: ZRANGE . key_zset_name operandnum operandnum opt_zrange_behavior
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 299
+    identifier     go to state 295
+
+
+State 85
+
+  217 zrangebyscore_clause: ZRANGEBYSCORE . key_zset_name operandnum operandnum
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 300
+    identifier     go to state 295
+
+
+State 86
+
+  218 zrank_stmt: ZRANK . key_zset_name zmember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 301
+    identifier     go to state 295
+
+
+State 87
+
+  219 zrem_stmt: ZREM . key_zset_name zmember_name_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 302
+    identifier     go to state 295
+
+
+State 88
+
+  220 zscore_stmt: ZSCORE . key_zset_name zmember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 303
+    identifier     go to state 295
+
+
+State 89
+
+  222 zunionstore_clause: ZUNIONSTORE . key_zset_name operandnum key_zset_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 304
+    identifier     go to state 295
+
+
+State 90
+
+  230 zinterstore_clause: ZINTERSTORE . key_zset_name operandnum key_zset_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 305
+    identifier     go to state 295
+
+
+State 91
+
+  231 select_stmt: SELECT . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 307
+    int_literal  go to state 308
+
+
+State 92
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 309
+
+
+State 93
+
+    1 program: stmtlist .
+
+    $default  reduce using rule 1 (program)
+
+
+State 94
+
+    2 stmtlist: stmt .
+    3         | stmt . stmtlist
+
+    DEL            shift, and go to state 1
+    DUMP           shift, and go to state 2
+    EXISTS         shift, and go to state 3
+    EXPIRE         shift, and go to state 4
+    EXPIREAT       shift, and go to state 5
+    MOVE           shift, and go to state 6
+    OBJECT         shift, and go to state 7
+    PERSIST        shift, and go to state 8
+    PEXPIRE        shift, and go to state 9
+    PEXPIREAT      shift, and go to state 10
+    PTTL           shift, and go to state 11
+    RANDOMKEY      shift, and go to state 12
+    RENAME         shift, and go to state 13
+    RENAMENX       shift, and go to state 14
+    SORT           shift, and go to state 15
+    GET            shift, and go to state 16
+    TTL            shift, and go to state 17
+    TYPE           shift, and go to state 18
+    APPEND         shift, and go to state 19
+    BITCOUNT       shift, and go to state 20
+    BITOP          shift, and go to state 21
+    DECR           shift, and go to state 22
+    DECRBY         shift, and go to state 23
+    GETBIT         shift, and go to state 24
+    GETRANGE       shift, and go to state 25
+    GETSET         shift, and go to state 26
+    INCR           shift, and go to state 27
+    INCRBY         shift, and go to state 28
+    INCRBYFLOAT    shift, and go to state 29
+    MGET           shift, and go to state 30
+    MSET           shift, and go to state 31
+    PSETEX         shift, and go to state 32
+    SET            shift, and go to state 33
+    SETBIT         shift, and go to state 34
+    SETEX          shift, and go to state 35
+    SETNX          shift, and go to state 36
+    SETRANGE       shift, and go to state 37
+    STRLEN         shift, and go to state 38
+    HDEL           shift, and go to state 39
+    HEXISTS        shift, and go to state 40
+    HGET           shift, and go to state 41
+    HGETALL        shift, and go to state 42
+    HINCRBY        shift, and go to state 43
+    HINCRBYFLOAT   shift, and go to state 44
+    HKEYS          shift, and go to state 45
+    HLEN           shift, and go to state 46
+    HMGET          shift, and go to state 47
+    HMSET          shift, and go to state 48
+    HSET           shift, and go to state 49
+    HSETNX         shift, and go to state 50
+    HVALS          shift, and go to state 51
+    LINDEX         shift, and go to state 52
+    LINSERT        shift, and go to state 53
+    LLEN           shift, and go to state 54
+    LPOP           shift, and go to state 55
+    LPUSH          shift, and go to state 56
+    LPUSHX         shift, and go to state 57
+    LRANGE         shift, and go to state 58
+    LREM           shift, and go to state 59
+    LSET           shift, and go to state 60
+    LTRIM          shift, and go to state 61
+    RPOP           shift, and go to state 62
+    RPOPLPUSH      shift, and go to state 63
+    RPUSH          shift, and go to state 64
+    RPUSHX         shift, and go to state 65
+    SADD           shift, and go to state 66
+    SCARD          shift, and go to state 67
+    SDIFF          shift, and go to state 68
+    SDIFFSTORE     shift, and go to state 69
+    SINTER         shift, and go to state 70
+    SINTERSTORE    shift, and go to state 71
+    SISMEMBER      shift, and go to state 72
+    SMEMBERS       shift, and go to state 73
+    SMOVE          shift, and go to state 74
+    SPOP           shift, and go to state 75
+    SRANDMEMBER    shift, and go to state 76
+    SREM           shift, and go to state 77
+    SUNION         shift, and go to state 78
+    SUNIONSTORE    shift, and go to state 79
+    ZADD           shift, and go to state 80
+    ZCARD          shift, and go to state 81
+    ZCOUNT         shift, and go to state 82
+    ZINCRBY        shift, and go to state 83
+    ZRANGE         shift, and go to state 84
+    ZRANGEBYSCORE  shift, and go to state 85
+    ZRANK          shift, and go to state 86
+    ZREM           shift, and go to state 87
+    ZSCORE         shift, and go to state 88
+    ZUNIONSTORE    shift, and go to state 89
+    ZINTERSTORE    shift, and go to state 90
+    SELECT         shift, and go to state 91
+
+    $default  reduce using rule 2 (stmtlist)
+
+    stmtlist              go to state 310
+    stmt                  go to state 94
+    key_stmt              go to state 95
+    string_stmt           go to state 96
+    hash_stmt             go to state 97
+    list_stmt             go to state 98
+    set_stmt              go to state 99
+    zset_stmt             go to state 100
+    connect_stmt          go to state 101
+    del_stmt              go to state 102
+    dump_stmt             go to state 103
+    exists_stmt           go to state 104
+    expire_stmt           go to state 105
+    expireat_stmt         go to state 106
+    move_stmt             go to state 107
+    object_stmt           go to state 108
+    persist_stmt          go to state 109
+    pexpire_stmt          go to state 110
+    pexpireat_stmt        go to state 111
+    pttl_stmt             go to state 112
+    randomkey_stmt        go to state 113
+    rename_stmt           go to state 114
+    renamenx_stmt         go to state 115
+    sort_stmt             go to state 116
+    sort_clause           go to state 117
+    ttl_stmt              go to state 118
+    type_stmt             go to state 119
+    append_stmt           go to state 120
+    bicount_stmt          go to state 121
+    setbit_stmt           go to state 122
+    bitop_stmt            go to state 123
+    decr_stmt             go to state 124
+    decrby_stmt           go to state 125
+    get_stmt              go to state 126
+    getbit_stmt           go to state 127
+    getrange_stmt         go to state 128
+    getset_stmt           go to state 129
+    incr_stmt             go to state 130
+    incrby_stmt           go to state 131
+    incrbyfloat_stmt      go to state 132
+    mget_stmt             go to state 133
+    mset_stmt             go to state 134
+    psetex_stmt           go to state 135
+    setkey_stmt           go to state 136
+    setex_stmt            go to state 137
+    setnx_stmt            go to state 138
+    setrange_stmt         go to state 139
+    strlen_stmt           go to state 140
+    hdel_stmt             go to state 141
+    hexists_stmt          go to state 142
+    hget_stmt             go to state 143
+    hgetall_stmt          go to state 144
+    hincrby_stmt          go to state 145
+    hincrbyfloat_stmt     go to state 146
+    hkeys_stmt            go to state 147
+    hlen_stmt             go to state 148
+    hmget_stmt            go to state 149
+    hmset_stmt            go to state 150
+    hset_stmt             go to state 151
+    hsetnx_stmt           go to state 152
+    hvals_stmt            go to state 153
+    lindex_stmt           go to state 154
+    linsert_stmt          go to state 155
+    llen_stmt             go to state 156
+    lpop_stmt             go to state 157
+    lpush_stmt            go to state 158
+    lpushx_stmt           go to state 159
+    lrange_stmt           go to state 160
+    lrem_stmt             go to state 161
+    lset_stmt             go to state 162
+    ltrim_stmt            go to state 163
+    rpop_stmt             go to state 164
+    rpoplpush_stmt        go to state 165
+    rpush_stmt            go to state 166
+    rpushx_stmt           go to state 167
+    sadd_stmt             go to state 168
+    scard_stmt            go to state 169
+    sdiff_stmt            go to state 170
+    sdiffstore_stmt       go to state 171
+    sinter_stmt           go to state 172
+    sinterstore_stmt      go to state 173
+    sismember_stmt        go to state 174
+    smember_stmt          go to state 175
+    smove_stmt            go to state 176
+    spop_stmt             go to state 177
+    srandmember_stmt      go to state 178
+    srem_stmt             go to state 179
+    sunion_stmt           go to state 180
+    sunionstore_stmt      go to state 181
+    zadd_stmt             go to state 182
+    zcard_stmt            go to state 183
+    zcount_stmt           go to state 184
+    zincrby_stmt          go to state 185
+    zrange_stmt           go to state 186
+    zrangebyscore_stmt    go to state 187
+    zrangebyscore_clause  go to state 188
+    zrank_stmt            go to state 189
+    zrem_stmt             go to state 190
+    zscore_stmt           go to state 191
+    zunionstore_stmt      go to state 192
+    zunionstore_clause    go to state 193
+    zinterstore_stmt      go to state 194
+    zinterstore_clause    go to state 195
+    select_stmt           go to state 196
+
+
+State 95
+
+    4 stmt: key_stmt .
+
+    $default  reduce using rule 4 (stmt)
+
+
+State 96
+
+    5 stmt: string_stmt .
+
+    $default  reduce using rule 5 (stmt)
+
+
+State 97
+
+    6 stmt: hash_stmt .
+
+    $default  reduce using rule 6 (stmt)
+
+
+State 98
+
+    7 stmt: list_stmt .
+
+    $default  reduce using rule 7 (stmt)
+
+
+State 99
+
+    8 stmt: set_stmt .
+
+    $default  reduce using rule 8 (stmt)
+
+
+State 100
+
+    9 stmt: zset_stmt .
+
+    $default  reduce using rule 9 (stmt)
+
+
+State 101
+
+   10 stmt: connect_stmt .
+
+    $default  reduce using rule 10 (stmt)
+
+
+State 102
+
+   11 key_stmt: del_stmt .
+
+    $default  reduce using rule 11 (key_stmt)
+
+
+State 103
+
+   12 key_stmt: dump_stmt .
+
+    $default  reduce using rule 12 (key_stmt)
+
+
+State 104
+
+   13 key_stmt: exists_stmt .
+
+    $default  reduce using rule 13 (key_stmt)
+
+
+State 105
+
+   14 key_stmt: expire_stmt .
+
+    $default  reduce using rule 14 (key_stmt)
+
+
+State 106
+
+   15 key_stmt: expireat_stmt .
+
+    $default  reduce using rule 15 (key_stmt)
+
+
+State 107
+
+   16 key_stmt: move_stmt .
+
+    $default  reduce using rule 16 (key_stmt)
+
+
+State 108
+
+   17 key_stmt: object_stmt .
+
+    $default  reduce using rule 17 (key_stmt)
+
+
+State 109
+
+   18 key_stmt: persist_stmt .
+
+    $default  reduce using rule 18 (key_stmt)
+
+
+State 110
+
+   19 key_stmt: pexpire_stmt .
+
+    $default  reduce using rule 19 (key_stmt)
+
+
+State 111
+
+   20 key_stmt: pexpireat_stmt .
+
+    $default  reduce using rule 20 (key_stmt)
+
+
+State 112
+
+   21 key_stmt: pttl_stmt .
+
+    $default  reduce using rule 21 (key_stmt)
+
+
+State 113
+
+   22 key_stmt: randomkey_stmt .
+
+    $default  reduce using rule 22 (key_stmt)
+
+
+State 114
+
+   23 key_stmt: rename_stmt .
+
+    $default  reduce using rule 23 (key_stmt)
+
+
+State 115
+
+   24 key_stmt: renamenx_stmt .
+
+    $default  reduce using rule 24 (key_stmt)
+
+
+State 116
+
+   25 key_stmt: sort_stmt .
+
+    $default  reduce using rule 25 (key_stmt)
+
+
+State 117
+
+  120 sort_stmt: sort_clause . opt_by_clause opt_limit_clause opt_sort_behavior opt_store_clause
+
+    BY  shift, and go to state 311
+
+    $default  reduce using rule 123 (opt_by_clause)
+
+    opt_by_clause  go to state 312
+
+
+State 118
+
+   26 key_stmt: ttl_stmt .
+
+    $default  reduce using rule 26 (key_stmt)
+
+
+State 119
+
+   27 key_stmt: type_stmt .
+
+    $default  reduce using rule 27 (key_stmt)
+
+
+State 120
+
+   28 string_stmt: append_stmt .
+
+    $default  reduce using rule 28 (string_stmt)
+
+
+State 121
+
+   29 string_stmt: bicount_stmt .
+
+    $default  reduce using rule 29 (string_stmt)
+
+
+State 122
+
+   30 string_stmt: setbit_stmt .
+
+    $default  reduce using rule 30 (string_stmt)
+
+
+State 123
+
+   31 string_stmt: bitop_stmt .
+
+    $default  reduce using rule 31 (string_stmt)
+
+
+State 124
+
+   32 string_stmt: decr_stmt .
+
+    $default  reduce using rule 32 (string_stmt)
+
+
+State 125
+
+   33 string_stmt: decrby_stmt .
+
+    $default  reduce using rule 33 (string_stmt)
+
+
+State 126
+
+   34 string_stmt: get_stmt .
+
+    $default  reduce using rule 34 (string_stmt)
+
+
+State 127
+
+   35 string_stmt: getbit_stmt .
+
+    $default  reduce using rule 35 (string_stmt)
+
+
+State 128
+
+   36 string_stmt: getrange_stmt .
+
+    $default  reduce using rule 36 (string_stmt)
+
+
+State 129
+
+   37 string_stmt: getset_stmt .
+
+    $default  reduce using rule 37 (string_stmt)
+
+
+State 130
+
+   38 string_stmt: incr_stmt .
+
+    $default  reduce using rule 38 (string_stmt)
+
+
+State 131
+
+   39 string_stmt: incrby_stmt .
+
+    $default  reduce using rule 39 (string_stmt)
+
+
+State 132
+
+   40 string_stmt: incrbyfloat_stmt .
+
+    $default  reduce using rule 40 (string_stmt)
+
+
+State 133
+
+   41 string_stmt: mget_stmt .
+
+    $default  reduce using rule 41 (string_stmt)
+
+
+State 134
+
+   42 string_stmt: mset_stmt .
+
+    $default  reduce using rule 42 (string_stmt)
+
+
+State 135
+
+   43 string_stmt: psetex_stmt .
+
+    $default  reduce using rule 43 (string_stmt)
+
+
+State 136
+
+   44 string_stmt: setkey_stmt .
+
+    $default  reduce using rule 44 (string_stmt)
+
+
+State 137
+
+   45 string_stmt: setex_stmt .
+
+    $default  reduce using rule 45 (string_stmt)
+
+
+State 138
+
+   46 string_stmt: setnx_stmt .
+
+    $default  reduce using rule 46 (string_stmt)
+
+
+State 139
+
+   47 string_stmt: setrange_stmt .
+
+    $default  reduce using rule 47 (string_stmt)
+
+
+State 140
+
+   48 string_stmt: strlen_stmt .
+
+    $default  reduce using rule 48 (string_stmt)
+
+
+State 141
+
+   49 hash_stmt: hdel_stmt .
+
+    $default  reduce using rule 49 (hash_stmt)
+
+
+State 142
+
+   50 hash_stmt: hexists_stmt .
+
+    $default  reduce using rule 50 (hash_stmt)
+
+
+State 143
+
+   51 hash_stmt: hget_stmt .
+
+    $default  reduce using rule 51 (hash_stmt)
+
+
+State 144
+
+   52 hash_stmt: hgetall_stmt .
+
+    $default  reduce using rule 52 (hash_stmt)
+
+
+State 145
+
+   53 hash_stmt: hincrby_stmt .
+
+    $default  reduce using rule 53 (hash_stmt)
+
+
+State 146
+
+   54 hash_stmt: hincrbyfloat_stmt .
+
+    $default  reduce using rule 54 (hash_stmt)
+
+
+State 147
+
+   55 hash_stmt: hkeys_stmt .
+
+    $default  reduce using rule 55 (hash_stmt)
+
+
+State 148
+
+   56 hash_stmt: hlen_stmt .
+
+    $default  reduce using rule 56 (hash_stmt)
+
+
+State 149
+
+   57 hash_stmt: hmget_stmt .
+
+    $default  reduce using rule 57 (hash_stmt)
+
+
+State 150
+
+   58 hash_stmt: hmset_stmt .
+
+    $default  reduce using rule 58 (hash_stmt)
+
+
+State 151
+
+   59 hash_stmt: hset_stmt .
+
+    $default  reduce using rule 59 (hash_stmt)
+
+
+State 152
+
+   60 hash_stmt: hsetnx_stmt .
+
+    $default  reduce using rule 60 (hash_stmt)
+
+
+State 153
+
+   61 hash_stmt: hvals_stmt .
+
+    $default  reduce using rule 61 (hash_stmt)
+
+
+State 154
+
+   62 list_stmt: lindex_stmt .
+
+    $default  reduce using rule 62 (list_stmt)
+
+
+State 155
+
+   63 list_stmt: linsert_stmt .
+
+    $default  reduce using rule 63 (list_stmt)
+
+
+State 156
+
+   64 list_stmt: llen_stmt .
+
+    $default  reduce using rule 64 (list_stmt)
+
+
+State 157
+
+   65 list_stmt: lpop_stmt .
+
+    $default  reduce using rule 65 (list_stmt)
+
+
+State 158
+
+   66 list_stmt: lpush_stmt .
+
+    $default  reduce using rule 66 (list_stmt)
+
+
+State 159
+
+   67 list_stmt: lpushx_stmt .
+
+    $default  reduce using rule 67 (list_stmt)
+
+
+State 160
+
+   68 list_stmt: lrange_stmt .
+
+    $default  reduce using rule 68 (list_stmt)
+
+
+State 161
+
+   69 list_stmt: lrem_stmt .
+
+    $default  reduce using rule 69 (list_stmt)
+
+
+State 162
+
+   70 list_stmt: lset_stmt .
+
+    $default  reduce using rule 70 (list_stmt)
+
+
+State 163
+
+   71 list_stmt: ltrim_stmt .
+
+    $default  reduce using rule 71 (list_stmt)
+
+
+State 164
+
+   72 list_stmt: rpop_stmt .
+
+    $default  reduce using rule 72 (list_stmt)
+
+
+State 165
+
+   73 list_stmt: rpoplpush_stmt .
+
+    $default  reduce using rule 73 (list_stmt)
+
+
+State 166
+
+   74 list_stmt: rpush_stmt .
+
+    $default  reduce using rule 74 (list_stmt)
+
+
+State 167
+
+   75 list_stmt: rpushx_stmt .
+
+    $default  reduce using rule 75 (list_stmt)
+
+
+State 168
+
+   76 set_stmt: sadd_stmt .
+
+    $default  reduce using rule 76 (set_stmt)
+
+
+State 169
+
+   77 set_stmt: scard_stmt .
+
+    $default  reduce using rule 77 (set_stmt)
+
+
+State 170
+
+   78 set_stmt: sdiff_stmt .
+
+    $default  reduce using rule 78 (set_stmt)
+
+
+State 171
+
+   79 set_stmt: sdiffstore_stmt .
+
+    $default  reduce using rule 79 (set_stmt)
+
+
+State 172
+
+   80 set_stmt: sinter_stmt .
+
+    $default  reduce using rule 80 (set_stmt)
+
+
+State 173
+
+   81 set_stmt: sinterstore_stmt .
+
+    $default  reduce using rule 81 (set_stmt)
+
+
+State 174
+
+   82 set_stmt: sismember_stmt .
+
+    $default  reduce using rule 82 (set_stmt)
+
+
+State 175
+
+   83 set_stmt: smember_stmt .
+
+    $default  reduce using rule 83 (set_stmt)
+
+
+State 176
+
+   84 set_stmt: smove_stmt .
+
+    $default  reduce using rule 84 (set_stmt)
+
+
+State 177
+
+   85 set_stmt: spop_stmt .
+
+    $default  reduce using rule 85 (set_stmt)
+
+
+State 178
+
+   86 set_stmt: srandmember_stmt .
+
+    $default  reduce using rule 86 (set_stmt)
+
+
+State 179
+
+   87 set_stmt: srem_stmt .
+
+    $default  reduce using rule 87 (set_stmt)
+
+
+State 180
+
+   88 set_stmt: sunion_stmt .
+
+    $default  reduce using rule 88 (set_stmt)
+
+
+State 181
+
+   89 set_stmt: sunionstore_stmt .
+
+    $default  reduce using rule 89 (set_stmt)
+
+
+State 182
+
+   90 zset_stmt: zadd_stmt .
+
+    $default  reduce using rule 90 (zset_stmt)
+
+
+State 183
+
+   91 zset_stmt: zcard_stmt .
+
+    $default  reduce using rule 91 (zset_stmt)
+
+
+State 184
+
+   92 zset_stmt: zcount_stmt .
+
+    $default  reduce using rule 92 (zset_stmt)
+
+
+State 185
+
+   93 zset_stmt: zincrby_stmt .
+
+    $default  reduce using rule 93 (zset_stmt)
+
+
+State 186
+
+   94 zset_stmt: zrange_stmt .
+
+    $default  reduce using rule 94 (zset_stmt)
+
+
+State 187
+
+   95 zset_stmt: zrangebyscore_stmt .
+
+    $default  reduce using rule 95 (zset_stmt)
+
+
+State 188
+
+  216 zrangebyscore_stmt: zrangebyscore_clause . opt_limit_clause
+
+    LIMIT  shift, and go to state 313
+
+    $default  reduce using rule 125 (opt_limit_clause)
+
+    opt_limit_clause  go to state 314
+
+
+State 189
+
+   96 zset_stmt: zrank_stmt .
+
+    $default  reduce using rule 96 (zset_stmt)
+
+
+State 190
+
+   97 zset_stmt: zrem_stmt .
+
+    $default  reduce using rule 97 (zset_stmt)
+
+
+State 191
+
+   98 zset_stmt: zscore_stmt .
+
+    $default  reduce using rule 98 (zset_stmt)
+
+
+State 192
+
+   99 zset_stmt: zunionstore_stmt .
+
+    $default  reduce using rule 99 (zset_stmt)
+
+
+State 193
+
+  221 zunionstore_stmt: zunionstore_clause . opt_weight_clause opt_aggregate_clause
+
+    WEIGHTS  shift, and go to state 315
+
+    $default  reduce using rule 224 (opt_weight_clause)
+
+    opt_weight_clause  go to state 316
+
+
+State 194
+
+  100 zset_stmt: zinterstore_stmt .
+
+    $default  reduce using rule 100 (zset_stmt)
+
+
+State 195
+
+  229 zinterstore_stmt: zinterstore_clause . opt_weight_clause opt_aggregate_clause
+
+    WEIGHTS  shift, and go to state 315
+
+    $default  reduce using rule 224 (opt_weight_clause)
+
+    opt_weight_clause  go to state 317
+
+
+State 196
+
+  101 connect_stmt: select_stmt .
+
+    $default  reduce using rule 101 (connect_stmt)
+
+
+State 197
+
+  276 identifier: IDENTIFIER .
+
+    $default  reduce using rule 276 (identifier)
+
+
+State 198
+
+  102 del_stmt: DEL key_list .
+
+    $default  reduce using rule 102 (del_stmt)
+
+
+State 199
+
+  232 key_list: keyname .
+  233         | keyname . key_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 232 (key_list)
+
+    key_list    go to state 318
+    keyname     go to state 199
+    identifier  go to state 200
+
+
+State 200
+
+  234 keyname: identifier .
+
+    $default  reduce using rule 234 (keyname)
+
+
+State 201
+
+  103 dump_stmt: DUMP keyname .
+
+    $default  reduce using rule 103 (dump_stmt)
+
+
+State 202
+
+  104 exists_stmt: EXISTS keyname .
+
+    $default  reduce using rule 104 (exists_stmt)
+
+
+State 203
+
+  105 expire_stmt: EXPIRE keyname . timesecond
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    timesecond      go to state 321
+    literal         go to state 322
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 204
+
+  106 expireat_stmt: EXPIREAT keyname . timeunix
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    timeunix        go to state 327
+    literal         go to state 328
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 205
+
+  107 move_stmt: MOVE keyname . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 329
+    int_literal  go to state 308
+
+
+State 206
+
+  109 objoption: REFCOUNT .
+
+    $default  reduce using rule 109 (objoption)
+
+
+State 207
+
+  110 objoption: ENCODING .
+
+    $default  reduce using rule 110 (objoption)
+
+
+State 208
+
+  111 objoption: IDLETIME .
+
+    $default  reduce using rule 111 (objoption)
+
+
+State 209
+
+  108 object_stmt: OBJECT objoption . keyname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 330
+    identifier  go to state 200
+
+
+State 210
+
+  112 persist_stmt: PERSIST keyname .
+
+    $default  reduce using rule 112 (persist_stmt)
+
+
+State 211
+
+  113 pexpire_stmt: PEXPIRE keyname . timesecond
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    timesecond      go to state 331
+    literal         go to state 322
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 212
+
+  114 pexpireat_stmt: PEXPIREAT keyname . timesecond
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    timesecond      go to state 332
+    literal         go to state 322
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 213
+
+  115 pttl_stmt: PTTL keyname .
+
+    $default  reduce using rule 115 (pttl_stmt)
+
+
+State 214
+
+  117 rename_stmt: RENAME keyname . aliasname
+
+    IDENTIFIER  shift, and go to state 197
+
+    aliasname   go to state 333
+    identifier  go to state 334
+
+
+State 215
+
+  118 renamenx_stmt: RENAMENX keyname . aliasname
+
+    IDENTIFIER  shift, and go to state 197
+
+    aliasname   go to state 335
+    identifier  go to state 334
+
+
+State 216
+
+  121 sort_clause: SORT keyname .
+
+    $default  reduce using rule 121 (sort_clause)
+
+
+State 217
+
+  144 get_stmt: GET key_string_name .
+
+    $default  reduce using rule 144 (get_stmt)
+
+
+State 218
+
+  238 key_string_name: identifier .
+
+    $default  reduce using rule 238 (key_string_name)
+
+
+State 219
+
+  132 ttl_stmt: TTL keyname .
+
+    $default  reduce using rule 132 (ttl_stmt)
+
+
+State 220
+
+  133 type_stmt: TYPE keyname .
+
+    $default  reduce using rule 133 (type_stmt)
+
+
+State 221
+
+  134 append_stmt: APPEND key_string_name . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 336
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 222
+
+  135 bicount_stmt: BITCOUNT key_string_name .
+
+    $default  reduce using rule 135 (bicount_stmt)
+
+
+State 223
+
+  138 operation: AND .
+
+    $default  reduce using rule 138 (operation)
+
+
+State 224
+
+  139 operation: OR .
+
+    $default  reduce using rule 139 (operation)
+
+
+State 225
+
+  140 operation: XOR .
+
+    $default  reduce using rule 140 (operation)
+
+
+State 226
+
+  141 operation: NOT .
+
+    $default  reduce using rule 141 (operation)
+
+
+State 227
+
+  137 bitop_stmt: BITOP operation . key_string_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_string_name  go to state 236
+    key_string_list  go to state 338
+    identifier       go to state 218
+
+
+State 228
+
+  142 decr_stmt: DECR key_string_name .
+
+    $default  reduce using rule 142 (decr_stmt)
+
+
+State 229
+
+  143 decrby_stmt: DECRBY key_string_name . num_literal
+
+    INTLITERAL    shift, and go to state 306
+    FLOATLITERAL  shift, and go to state 319
+
+    num_literal    go to state 339
+    int_literal    go to state 325
+    float_literal  go to state 326
+
+
+State 230
+
+  145 getbit_stmt: GETBIT key_string_name . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 340
+    int_literal  go to state 308
+
+
+State 231
+
+  146 getrange_stmt: GETRANGE key_string_name . operandnum operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 341
+    int_literal  go to state 308
+
+
+State 232
+
+  147 getset_stmt: GETSET key_string_name . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 342
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 233
+
+  148 incr_stmt: INCR key_string_name .
+
+    $default  reduce using rule 148 (incr_stmt)
+
+
+State 234
+
+  149 incrby_stmt: INCRBY key_string_name . num_literal
+
+    INTLITERAL    shift, and go to state 306
+    FLOATLITERAL  shift, and go to state 319
+
+    num_literal    go to state 343
+    int_literal    go to state 325
+    float_literal  go to state 326
+
+
+State 235
+
+  150 incrbyfloat_stmt: INCRBYFLOAT key_string_name . float_literal
+
+    FLOATLITERAL  shift, and go to state 319
+
+    float_literal  go to state 344
+
+
+State 236
+
+  239 key_string_list: key_string_name .
+  240                | key_string_name . key_string_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 239 (key_string_list)
+
+    key_string_name  go to state 236
+    key_string_list  go to state 345
+    identifier       go to state 218
+
+
+State 237
+
+  151 mget_stmt: MGET key_string_list .
+
+    $default  reduce using rule 151 (mget_stmt)
+
+
+State 238
+
+  243 key_string_value: key_string_name . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 346
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 239
+
+  152 mset_stmt: MSET key_string_value_list .
+
+    $default  reduce using rule 152 (mset_stmt)
+
+
+State 240
+
+  241 key_string_value_list: key_string_value .
+  242                      | key_string_value . key_string_value_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 241 (key_string_value_list)
+
+    key_string_name        go to state 238
+    key_string_value_list  go to state 347
+    key_string_value       go to state 240
+    identifier             go to state 218
+
+
+State 241
+
+  153 psetex_stmt: PSETEX key_string_name . timesecond value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    timesecond      go to state 348
+    literal         go to state 322
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 242
+
+  154 setkey_stmt: SET setkey_clause . opt_expiretime_clause opt_setkey_behavior
+
+    EX  shift, and go to state 349
+    PX  shift, and go to state 350
+
+    $default  reduce using rule 158 (opt_expiretime_clause)
+
+    opt_expiretime_clause  go to state 351
+
+
+State 243
+
+  155 setkey_clause: key_string_name . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 352
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 244
+
+  136 setbit_stmt: SETBIT key_string_name . operandnum value
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 353
+    int_literal  go to state 308
+
+
+State 245
+
+  162 setex_stmt: SETEX key_string_name . timesecond value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    timesecond      go to state 354
+    literal         go to state 322
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 246
+
+  163 setnx_stmt: SETNX key_string_name . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 355
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 247
+
+  164 setrange_stmt: SETRANGE key_string_name . operandnum value
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 356
+    int_literal  go to state 308
+
+
+State 248
+
+  165 strlen_stmt: STRLEN key_string_name .
+
+    $default  reduce using rule 165 (strlen_stmt)
+
+
+State 249
+
+  166 hdel_stmt: HDEL key_hash_name . del_field_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    field_name      go to state 357
+    del_field_list  go to state 358
+    identifier      go to state 359
+
+
+State 250
+
+  244 key_hash_name: identifier .
+
+    $default  reduce using rule 244 (key_hash_name)
+
+
+State 251
+
+  167 hexists_stmt: HEXISTS key_hash_name . field_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    field_name  go to state 360
+    identifier  go to state 359
+
+
+State 252
+
+  168 hget_stmt: HGET key_hash_name . field_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    field_name  go to state 361
+    identifier  go to state 359
+
+
+State 253
+
+  169 hgetall_stmt: HGETALL key_hash_name .
+
+    $default  reduce using rule 169 (hgetall_stmt)
+
+
+State 254
+
+  170 hincrby_stmt: HINCRBY key_hash_name . field_name num_literal
+
+    IDENTIFIER  shift, and go to state 197
+
+    field_name  go to state 362
+    identifier  go to state 359
+
+
+State 255
+
+  171 hincrbyfloat_stmt: HINCRBYFLOAT key_hash_name . field_name float_literal
+
+    IDENTIFIER  shift, and go to state 197
+
+    field_name  go to state 363
+    identifier  go to state 359
+
+
+State 256
+
+  172 hkeys_stmt: HKEYS key_hash_name .
+
+    $default  reduce using rule 172 (hkeys_stmt)
+
+
+State 257
+
+  173 hlen_stmt: HLEN key_hash_name .
+
+    $default  reduce using rule 173 (hlen_stmt)
+
+
+State 258
+
+  174 hmget_stmt: HMGET key_hash_name . field_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    field_name  go to state 364
+    field_list  go to state 365
+    identifier  go to state 359
+
+
+State 259
+
+  175 hmset_stmt: HMSET key_hash_name . field_value_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    field_name        go to state 366
+    field_value       go to state 367
+    field_value_list  go to state 368
+    identifier        go to state 359
+
+
+State 260
+
+  176 hset_stmt: HSET key_hash_name . field_value
+
+    IDENTIFIER  shift, and go to state 197
+
+    field_name   go to state 366
+    field_value  go to state 369
+    identifier   go to state 359
+
+
+State 261
+
+  177 hsetnx_stmt: HSETNX key_hash_name . field_value
+
+    IDENTIFIER  shift, and go to state 197
+
+    field_name   go to state 366
+    field_value  go to state 370
+    identifier   go to state 359
+
+
+State 262
+
+  178 hvals_stmt: HVALS key_hash_name .
+
+    $default  reduce using rule 178 (hvals_stmt)
+
+
+State 263
+
+  179 lindex_stmt: LINDEX key_list_name . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 371
+    int_literal  go to state 308
+
+
+State 264
+
+  253 key_list_name: identifier .
+
+    $default  reduce using rule 253 (key_list_name)
+
+
+State 265
+
+  180 linsert_stmt: LINSERT key_list_name . opt_linsert_behavior value value
+
+    BEFORE  shift, and go to state 372
+    AFTER   shift, and go to state 373
+
+    opt_linsert_behavior  go to state 374
+
+
+State 266
+
+  183 llen_stmt: LLEN key_list_name .
+
+    $default  reduce using rule 183 (llen_stmt)
+
+
+State 267
+
+  184 lpop_stmt: LPOP key_list_name .
+
+    $default  reduce using rule 184 (lpop_stmt)
+
+
+State 268
+
+  185 lpush_stmt: LPUSH key_list_name . value_list
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 375
+    value_list      go to state 376
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 269
+
+  186 lpushx_stmt: LPUSHX key_list_name . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 377
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 270
+
+  187 lrange_stmt: LRANGE key_list_name . operandnum operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 378
+    int_literal  go to state 308
+
+
+State 271
+
+  188 lrem_stmt: LREM key_list_name . operandnum value
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 379
+    int_literal  go to state 308
+
+
+State 272
+
+  189 lset_stmt: LSET key_list_name . operandnum value
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 380
+    int_literal  go to state 308
+
+
+State 273
+
+  190 ltrim_stmt: LTRIM key_list_name . operandnum operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 381
+    int_literal  go to state 308
+
+
+State 274
+
+  191 rpop_stmt: RPOP key_list_name .
+
+    $default  reduce using rule 191 (rpop_stmt)
+
+
+State 275
+
+  192 rpoplpush_stmt: RPOPLPUSH key_list_name . key_list_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_list_name  go to state 382
+    identifier     go to state 264
+
+
+State 276
+
+  193 rpush_stmt: RPUSH key_list_name . value_list
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 375
+    value_list      go to state 383
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 277
+
+  194 rpushx_stmt: RPUSHX key_list_name . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 384
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 278
+
+  195 sadd_stmt: SADD key_set_name . smember_name_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    smember_name       go to state 385
+    smember_name_list  go to state 386
+    identifier         go to state 387
+
+
+State 279
+
+  254 key_set_name: identifier .
+
+    $default  reduce using rule 254 (key_set_name)
+
+
+State 280
+
+  196 scard_stmt: SCARD key_set_name .
+
+    $default  reduce using rule 196 (scard_stmt)
+
+
+State 281
+
+  257 key_set_list: key_set_name .
+  258             | key_set_name . key_set_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 257 (key_set_list)
+
+    key_set_name  go to state 281
+    key_set_list  go to state 388
+    identifier    go to state 279
+
+
+State 282
+
+  197 sdiff_stmt: SDIFF key_set_list .
+
+    $default  reduce using rule 197 (sdiff_stmt)
+
+
+State 283
+
+  198 sdiffstore_stmt: SDIFFSTORE key_set_list .
+
+    $default  reduce using rule 198 (sdiffstore_stmt)
+
+
+State 284
+
+  199 sinter_stmt: SINTER key_set_list .
+
+    $default  reduce using rule 199 (sinter_stmt)
+
+
+State 285
+
+  200 sinterstore_stmt: SINTERSTORE key_set_list .
+
+    $default  reduce using rule 200 (sinterstore_stmt)
+
+
+State 286
+
+  201 sismember_stmt: SISMEMBER key_set_name . smember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    smember_name  go to state 389
+    identifier    go to state 387
+
+
+State 287
+
+  202 smember_stmt: SMEMBERS key_set_name .
+
+    $default  reduce using rule 202 (smember_stmt)
+
+
+State 288
+
+  203 smove_stmt: SMOVE key_set_name . key_set_name smember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name  go to state 390
+    identifier    go to state 279
+
+
+State 289
+
+  204 spop_stmt: SPOP key_set_name .
+
+    $default  reduce using rule 204 (spop_stmt)
+
+
+State 290
+
+  205 srandmember_stmt: SRANDMEMBER key_set_name . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 391
+    int_literal  go to state 308
+
+
+State 291
+
+  206 srem_stmt: SREM key_set_name . del_key_set_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_set_name      go to state 392
+    del_key_set_list  go to state 393
+    identifier        go to state 279
+
+
+State 292
+
+  207 sunion_stmt: SUNION key_set_list .
+
+    $default  reduce using rule 207 (sunion_stmt)
+
+
+State 293
+
+  208 sunionstore_stmt: SUNIONSTORE key_set_list .
+
+    $default  reduce using rule 208 (sunionstore_stmt)
+
+
+State 294
+
+  209 zadd_stmt: ZADD key_zset_name . zmember_value_list
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value               go to state 394
+    zmember_value       go to state 395
+    zmember_value_list  go to state 396
+    literal             go to state 337
+    string_literal      go to state 323
+    num_literal         go to state 324
+    int_literal         go to state 325
+    float_literal       go to state 326
+
+
+State 295
+
+  262 key_zset_name: identifier .
+
+    $default  reduce using rule 262 (key_zset_name)
+
+
+State 296
+
+  210 zcard_stmt: ZCARD key_zset_name .
+
+    $default  reduce using rule 210 (zcard_stmt)
+
+
+State 297
+
+  211 zcount_stmt: ZCOUNT key_zset_name . operandnum operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 397
+    int_literal  go to state 308
+
+
+State 298
+
+  212 zincrby_stmt: ZINCRBY key_zset_name . operandnum zmember_name
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 398
+    int_literal  go to state 308
+
+
+State 299
+
+  213 zrange_stmt: ZRANGE key_zset_name . operandnum operandnum opt_zrange_behavior
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 399
+    int_literal  go to state 308
+
+
+State 300
+
+  217 zrangebyscore_clause: ZRANGEBYSCORE key_zset_name . operandnum operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 400
+    int_literal  go to state 308
+
+
+State 301
+
+  218 zrank_stmt: ZRANK key_zset_name . zmember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    zmember_name  go to state 401
+    identifier    go to state 402
+
+
+State 302
+
+  219 zrem_stmt: ZREM key_zset_name . zmember_name_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    zmember_name       go to state 403
+    zmember_name_list  go to state 404
+    identifier         go to state 402
+
+
+State 303
+
+  220 zscore_stmt: ZSCORE key_zset_name . zmember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    zmember_name  go to state 405
+    identifier    go to state 402
+
+
+State 304
+
+  222 zunionstore_clause: ZUNIONSTORE key_zset_name . operandnum key_zset_list
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 406
+    int_literal  go to state 308
+
+
+State 305
+
+  230 zinterstore_clause: ZINTERSTORE key_zset_name . operandnum key_zset_list
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 407
+    int_literal  go to state 308
+
+
+State 306
+
+  282 int_literal: INTLITERAL .
+
+    $default  reduce using rule 282 (int_literal)
+
+
+State 307
+
+  231 select_stmt: SELECT operandnum .
+
+    $default  reduce using rule 231 (select_stmt)
+
+
+State 308
+
+  273 operandnum: int_literal .
+
+    $default  reduce using rule 273 (operandnum)
+
+
+State 309
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 310
+
+    3 stmtlist: stmt stmtlist .
+
+    $default  reduce using rule 3 (stmtlist)
+
+
+State 311
+
+  122 opt_by_clause: BY . keyname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 408
+    identifier  go to state 200
+
+
+State 312
+
+  120 sort_stmt: sort_clause opt_by_clause . opt_limit_clause opt_sort_behavior opt_store_clause
+
+    LIMIT  shift, and go to state 313
+
+    $default  reduce using rule 125 (opt_limit_clause)
+
+    opt_limit_clause  go to state 409
+
+
+State 313
+
+  124 opt_limit_clause: LIMIT . operandnum operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 410
+    int_literal  go to state 308
+
+
+State 314
+
+  216 zrangebyscore_stmt: zrangebyscore_clause opt_limit_clause .
+
+    $default  reduce using rule 216 (zrangebyscore_stmt)
+
+
+State 315
+
+  223 opt_weight_clause: WEIGHTS . operandnum_list
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum       go to state 411
+    operandnum_list  go to state 412
+    int_literal      go to state 308
+
+
+State 316
+
+  221 zunionstore_stmt: zunionstore_clause opt_weight_clause . opt_aggregate_clause
+
+    AGGREGATE  shift, and go to state 413
+
+    $default  reduce using rule 228 (opt_aggregate_clause)
+
+    opt_aggregate_clause  go to state 414
+
+
+State 317
+
+  229 zinterstore_stmt: zinterstore_clause opt_weight_clause . opt_aggregate_clause
+
+    AGGREGATE  shift, and go to state 413
+
+    $default  reduce using rule 228 (opt_aggregate_clause)
+
+    opt_aggregate_clause  go to state 415
+
+
+State 318
+
+  233 key_list: keyname key_list .
+
+    $default  reduce using rule 233 (key_list)
+
+
+State 319
+
+  283 float_literal: FLOATLITERAL .
+
+    $default  reduce using rule 283 (float_literal)
+
+
+State 320
+
+  279 string_literal: STRINGLITERAL .
+
+    $default  reduce using rule 279 (string_literal)
+
+
+State 321
+
+  105 expire_stmt: EXPIRE keyname timesecond .
+
+    $default  reduce using rule 105 (expire_stmt)
+
+
+State 322
+
+  271 timesecond: literal .
+
+    $default  reduce using rule 271 (timesecond)
+
+
+State 323
+
+  277 literal: string_literal .
+
+    $default  reduce using rule 277 (literal)
+
+
+State 324
+
+  278 literal: num_literal .
+
+    $default  reduce using rule 278 (literal)
+
+
+State 325
+
+  280 num_literal: int_literal .
+
+    $default  reduce using rule 280 (num_literal)
+
+
+State 326
+
+  281 num_literal: float_literal .
+
+    $default  reduce using rule 281 (num_literal)
+
+
+State 327
+
+  106 expireat_stmt: EXPIREAT keyname timeunix .
+
+    $default  reduce using rule 106 (expireat_stmt)
+
+
+State 328
+
+  272 timeunix: literal .
+
+    $default  reduce using rule 272 (timeunix)
+
+
+State 329
+
+  107 move_stmt: MOVE keyname operandnum .
+
+    $default  reduce using rule 107 (move_stmt)
+
+
+State 330
+
+  108 object_stmt: OBJECT objoption keyname .
+
+    $default  reduce using rule 108 (object_stmt)
+
+
+State 331
+
+  113 pexpire_stmt: PEXPIRE keyname timesecond .
+
+    $default  reduce using rule 113 (pexpire_stmt)
+
+
+State 332
+
+  114 pexpireat_stmt: PEXPIREAT keyname timesecond .
+
+    $default  reduce using rule 114 (pexpireat_stmt)
+
+
+State 333
+
+  117 rename_stmt: RENAME keyname aliasname .
+
+    $default  reduce using rule 117 (rename_stmt)
+
+
+State 334
+
+  119 aliasname: identifier .
+
+    $default  reduce using rule 119 (aliasname)
+
+
+State 335
+
+  118 renamenx_stmt: RENAMENX keyname aliasname .
+
+    $default  reduce using rule 118 (renamenx_stmt)
+
+
+State 336
+
+  134 append_stmt: APPEND key_string_name value .
+
+    $default  reduce using rule 134 (append_stmt)
+
+
+State 337
+
+  235 value: literal .
+
+    $default  reduce using rule 235 (value)
+
+
+State 338
+
+  137 bitop_stmt: BITOP operation key_string_list .
+
+    $default  reduce using rule 137 (bitop_stmt)
+
+
+State 339
+
+  143 decrby_stmt: DECRBY key_string_name num_literal .
+
+    $default  reduce using rule 143 (decrby_stmt)
+
+
+State 340
+
+  145 getbit_stmt: GETBIT key_string_name operandnum .
+
+    $default  reduce using rule 145 (getbit_stmt)
+
+
+State 341
+
+  146 getrange_stmt: GETRANGE key_string_name operandnum . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 416
+    int_literal  go to state 308
+
+
+State 342
+
+  147 getset_stmt: GETSET key_string_name value .
+
+    $default  reduce using rule 147 (getset_stmt)
+
+
+State 343
+
+  149 incrby_stmt: INCRBY key_string_name num_literal .
+
+    $default  reduce using rule 149 (incrby_stmt)
+
+
+State 344
+
+  150 incrbyfloat_stmt: INCRBYFLOAT key_string_name float_literal .
+
+    $default  reduce using rule 150 (incrbyfloat_stmt)
+
+
+State 345
+
+  240 key_string_list: key_string_name key_string_list .
+
+    $default  reduce using rule 240 (key_string_list)
+
+
+State 346
+
+  243 key_string_value: key_string_name value .
+
+    $default  reduce using rule 243 (key_string_value)
+
+
+State 347
+
+  242 key_string_value_list: key_string_value key_string_value_list .
+
+    $default  reduce using rule 242 (key_string_value_list)
+
+
+State 348
+
+  153 psetex_stmt: PSETEX key_string_name timesecond . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 417
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 349
+
+  156 opt_expiretime_clause: EX . timesecond
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    timesecond      go to state 418
+    literal         go to state 322
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 350
+
+  157 opt_expiretime_clause: PX . timesecond
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    timesecond      go to state 419
+    literal         go to state 322
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 351
+
+  154 setkey_stmt: SET setkey_clause opt_expiretime_clause . opt_setkey_behavior
+
+    NX  shift, and go to state 420
+    XX  shift, and go to state 421
+
+    $default  reduce using rule 161 (opt_setkey_behavior)
+
+    opt_setkey_behavior  go to state 422
+
+
+State 352
+
+  155 setkey_clause: key_string_name value .
+
+    $default  reduce using rule 155 (setkey_clause)
+
+
+State 353
+
+  136 setbit_stmt: SETBIT key_string_name operandnum . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 423
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 354
+
+  162 setex_stmt: SETEX key_string_name timesecond . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 424
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 355
+
+  163 setnx_stmt: SETNX key_string_name value .
+
+    $default  reduce using rule 163 (setnx_stmt)
+
+
+State 356
+
+  164 setrange_stmt: SETRANGE key_string_name operandnum . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 425
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 357
+
+  246 del_field_list: field_name .
+  247               | field_name . field_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 246 (del_field_list)
+
+    field_name  go to state 364
+    field_list  go to state 426
+    identifier  go to state 359
+
+
+State 358
+
+  166 hdel_stmt: HDEL key_hash_name del_field_list .
+
+    $default  reduce using rule 166 (hdel_stmt)
+
+
+State 359
+
+  245 field_name: identifier .
+
+    $default  reduce using rule 245 (field_name)
+
+
+State 360
+
+  167 hexists_stmt: HEXISTS key_hash_name field_name .
+
+    $default  reduce using rule 167 (hexists_stmt)
+
+
+State 361
+
+  168 hget_stmt: HGET key_hash_name field_name .
+
+    $default  reduce using rule 168 (hget_stmt)
+
+
+State 362
+
+  170 hincrby_stmt: HINCRBY key_hash_name field_name . num_literal
+
+    INTLITERAL    shift, and go to state 306
+    FLOATLITERAL  shift, and go to state 319
+
+    num_literal    go to state 427
+    int_literal    go to state 325
+    float_literal  go to state 326
+
+
+State 363
+
+  171 hincrbyfloat_stmt: HINCRBYFLOAT key_hash_name field_name . float_literal
+
+    FLOATLITERAL  shift, and go to state 319
+
+    float_literal  go to state 428
+
+
+State 364
+
+  248 field_list: field_name .
+  249           | field_name . field_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 248 (field_list)
+
+    field_name  go to state 364
+    field_list  go to state 429
+    identifier  go to state 359
+
+
+State 365
+
+  174 hmget_stmt: HMGET key_hash_name field_list .
+
+    $default  reduce using rule 174 (hmget_stmt)
+
+
+State 366
+
+  250 field_value: field_name . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 430
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 367
+
+  251 field_value_list: field_value .
+  252                 | field_value . field_value_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 251 (field_value_list)
+
+    field_name        go to state 366
+    field_value       go to state 367
+    field_value_list  go to state 431
+    identifier        go to state 359
+
+
+State 368
+
+  175 hmset_stmt: HMSET key_hash_name field_value_list .
+
+    $default  reduce using rule 175 (hmset_stmt)
+
+
+State 369
+
+  176 hset_stmt: HSET key_hash_name field_value .
+
+    $default  reduce using rule 176 (hset_stmt)
+
+
+State 370
+
+  177 hsetnx_stmt: HSETNX key_hash_name field_value .
+
+    $default  reduce using rule 177 (hsetnx_stmt)
+
+
+State 371
+
+  179 lindex_stmt: LINDEX key_list_name operandnum .
+
+    $default  reduce using rule 179 (lindex_stmt)
+
+
+State 372
+
+  181 opt_linsert_behavior: BEFORE .
+
+    $default  reduce using rule 181 (opt_linsert_behavior)
+
+
+State 373
+
+  182 opt_linsert_behavior: AFTER .
+
+    $default  reduce using rule 182 (opt_linsert_behavior)
+
+
+State 374
+
+  180 linsert_stmt: LINSERT key_list_name opt_linsert_behavior . value value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 432
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 375
+
+  236 value_list: value .
+  237           | value . value_list
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    $default  reduce using rule 236 (value_list)
+
+    value           go to state 375
+    value_list      go to state 433
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 376
+
+  185 lpush_stmt: LPUSH key_list_name value_list .
+
+    $default  reduce using rule 185 (lpush_stmt)
+
+
+State 377
+
+  186 lpushx_stmt: LPUSHX key_list_name value .
+
+    $default  reduce using rule 186 (lpushx_stmt)
+
+
+State 378
+
+  187 lrange_stmt: LRANGE key_list_name operandnum . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 434
+    int_literal  go to state 308
+
+
+State 379
+
+  188 lrem_stmt: LREM key_list_name operandnum . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 435
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 380
+
+  189 lset_stmt: LSET key_list_name operandnum . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 436
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 381
+
+  190 ltrim_stmt: LTRIM key_list_name operandnum . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 437
+    int_literal  go to state 308
+
+
+State 382
+
+  192 rpoplpush_stmt: RPOPLPUSH key_list_name key_list_name .
+
+    $default  reduce using rule 192 (rpoplpush_stmt)
+
+
+State 383
+
+  193 rpush_stmt: RPUSH key_list_name value_list .
+
+    $default  reduce using rule 193 (rpush_stmt)
+
+
+State 384
+
+  194 rpushx_stmt: RPUSHX key_list_name value .
+
+    $default  reduce using rule 194 (rpushx_stmt)
+
+
+State 385
+
+  260 smember_name_list: smember_name .
+  261                  | smember_name . smember_name_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 260 (smember_name_list)
+
+    smember_name       go to state 385
+    smember_name_list  go to state 438
+    identifier         go to state 387
+
+
+State 386
+
+  195 sadd_stmt: SADD key_set_name smember_name_list .
+
+    $default  reduce using rule 195 (sadd_stmt)
+
+
+State 387
+
+  259 smember_name: identifier .
+
+    $default  reduce using rule 259 (smember_name)
+
+
+State 388
+
+  258 key_set_list: key_set_name key_set_list .
+
+    $default  reduce using rule 258 (key_set_list)
+
+
+State 389
+
+  201 sismember_stmt: SISMEMBER key_set_name smember_name .
+
+    $default  reduce using rule 201 (sismember_stmt)
+
+
+State 390
+
+  203 smove_stmt: SMOVE key_set_name key_set_name . smember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    smember_name  go to state 439
+    identifier    go to state 387
+
+
+State 391
+
+  205 srandmember_stmt: SRANDMEMBER key_set_name operandnum .
+
+    $default  reduce using rule 205 (srandmember_stmt)
+
+
+State 392
+
+  255 del_key_set_list: key_set_name .
+  256                 | key_set_name . del_key_set_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 255 (del_key_set_list)
+
+    key_set_name      go to state 392
+    del_key_set_list  go to state 440
+    identifier        go to state 279
+
+
+State 393
+
+  206 srem_stmt: SREM key_set_name del_key_set_list .
+
+    $default  reduce using rule 206 (srem_stmt)
+
+
+State 394
+
+  268 zmember_value: value . zmember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    zmember_name  go to state 441
+    identifier    go to state 402
+
+
+State 395
+
+  269 zmember_value_list: zmember_value .
+  270                   | zmember_value . zmember_value_list
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    $default  reduce using rule 269 (zmember_value_list)
+
+    value               go to state 394
+    zmember_value       go to state 395
+    zmember_value_list  go to state 442
+    literal             go to state 337
+    string_literal      go to state 323
+    num_literal         go to state 324
+    int_literal         go to state 325
+    float_literal       go to state 326
+
+
+State 396
+
+  209 zadd_stmt: ZADD key_zset_name zmember_value_list .
+
+    $default  reduce using rule 209 (zadd_stmt)
+
+
+State 397
+
+  211 zcount_stmt: ZCOUNT key_zset_name operandnum . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 443
+    int_literal  go to state 308
+
+
+State 398
+
+  212 zincrby_stmt: ZINCRBY key_zset_name operandnum . zmember_name
+
+    IDENTIFIER  shift, and go to state 197
+
+    zmember_name  go to state 444
+    identifier    go to state 402
+
+
+State 399
+
+  213 zrange_stmt: ZRANGE key_zset_name operandnum . operandnum opt_zrange_behavior
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 445
+    int_literal  go to state 308
+
+
+State 400
+
+  217 zrangebyscore_clause: ZRANGEBYSCORE key_zset_name operandnum . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 446
+    int_literal  go to state 308
+
+
+State 401
+
+  218 zrank_stmt: ZRANK key_zset_name zmember_name .
+
+    $default  reduce using rule 218 (zrank_stmt)
+
+
+State 402
+
+  265 zmember_name: identifier .
+
+    $default  reduce using rule 265 (zmember_name)
+
+
+State 403
+
+  266 zmember_name_list: zmember_name .
+  267                  | zmember_name . zmember_name_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 266 (zmember_name_list)
+
+    zmember_name       go to state 403
+    zmember_name_list  go to state 447
+    identifier         go to state 402
+
+
+State 404
+
+  219 zrem_stmt: ZREM key_zset_name zmember_name_list .
+
+    $default  reduce using rule 219 (zrem_stmt)
+
+
+State 405
+
+  220 zscore_stmt: ZSCORE key_zset_name zmember_name .
+
+    $default  reduce using rule 220 (zscore_stmt)
+
+
+State 406
+
+  222 zunionstore_clause: ZUNIONSTORE key_zset_name operandnum . key_zset_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 448
+    key_zset_list  go to state 449
+    identifier     go to state 295
+
+
+State 407
+
+  230 zinterstore_clause: ZINTERSTORE key_zset_name operandnum . key_zset_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    key_zset_name  go to state 448
+    key_zset_list  go to state 450
+    identifier     go to state 295
+
+
+State 408
+
+  122 opt_by_clause: BY keyname .
+
+    $default  reduce using rule 122 (opt_by_clause)
+
+
+State 409
+
+  120 sort_stmt: sort_clause opt_by_clause opt_limit_clause . opt_sort_behavior opt_store_clause
+
+    ASC    shift, and go to state 451
+    DESC   shift, and go to state 452
+    ALPHA  shift, and go to state 453
+
+    $default  reduce using rule 131 (opt_sort_behavior)
+
+    opt_sort_behavior  go to state 454
+
+
+State 410
+
+  124 opt_limit_clause: LIMIT operandnum . operandnum
+
+    INTLITERAL  shift, and go to state 306
+
+    operandnum   go to state 455
+    int_literal  go to state 308
+
+
+State 411
+
+  274 operandnum_list: operandnum .
+  275                | operandnum . operandnum_list
+
+    INTLITERAL  shift, and go to state 306
+
+    $default  reduce using rule 274 (operandnum_list)
+
+    operandnum       go to state 411
+    operandnum_list  go to state 456
+    int_literal      go to state 308
+
+
+State 412
+
+  223 opt_weight_clause: WEIGHTS operandnum_list .
+
+    $default  reduce using rule 223 (opt_weight_clause)
+
+
+State 413
+
+  225 opt_aggregate_clause: AGGREGATE . SUM
+  226                     | AGGREGATE . MIN
+  227                     | AGGREGATE . MAX
+
+    SUM  shift, and go to state 457
+    MIN  shift, and go to state 458
+    MAX  shift, and go to state 459
+
+
+State 414
+
+  221 zunionstore_stmt: zunionstore_clause opt_weight_clause opt_aggregate_clause .
+
+    $default  reduce using rule 221 (zunionstore_stmt)
+
+
+State 415
+
+  229 zinterstore_stmt: zinterstore_clause opt_weight_clause opt_aggregate_clause .
+
+    $default  reduce using rule 229 (zinterstore_stmt)
+
+
+State 416
+
+  146 getrange_stmt: GETRANGE key_string_name operandnum operandnum .
+
+    $default  reduce using rule 146 (getrange_stmt)
+
+
+State 417
+
+  153 psetex_stmt: PSETEX key_string_name timesecond value .
+
+    $default  reduce using rule 153 (psetex_stmt)
+
+
+State 418
+
+  156 opt_expiretime_clause: EX timesecond .
+
+    $default  reduce using rule 156 (opt_expiretime_clause)
+
+
+State 419
+
+  157 opt_expiretime_clause: PX timesecond .
+
+    $default  reduce using rule 157 (opt_expiretime_clause)
+
+
+State 420
+
+  159 opt_setkey_behavior: NX .
+
+    $default  reduce using rule 159 (opt_setkey_behavior)
+
+
+State 421
+
+  160 opt_setkey_behavior: XX .
+
+    $default  reduce using rule 160 (opt_setkey_behavior)
+
+
+State 422
+
+  154 setkey_stmt: SET setkey_clause opt_expiretime_clause opt_setkey_behavior .
+
+    $default  reduce using rule 154 (setkey_stmt)
+
+
+State 423
+
+  136 setbit_stmt: SETBIT key_string_name operandnum value .
+
+    $default  reduce using rule 136 (setbit_stmt)
+
+
+State 424
+
+  162 setex_stmt: SETEX key_string_name timesecond value .
+
+    $default  reduce using rule 162 (setex_stmt)
+
+
+State 425
+
+  164 setrange_stmt: SETRANGE key_string_name operandnum value .
+
+    $default  reduce using rule 164 (setrange_stmt)
+
+
+State 426
+
+  247 del_field_list: field_name field_list .
+
+    $default  reduce using rule 247 (del_field_list)
+
+
+State 427
+
+  170 hincrby_stmt: HINCRBY key_hash_name field_name num_literal .
+
+    $default  reduce using rule 170 (hincrby_stmt)
+
+
+State 428
+
+  171 hincrbyfloat_stmt: HINCRBYFLOAT key_hash_name field_name float_literal .
+
+    $default  reduce using rule 171 (hincrbyfloat_stmt)
+
+
+State 429
+
+  249 field_list: field_name field_list .
+
+    $default  reduce using rule 249 (field_list)
+
+
+State 430
+
+  250 field_value: field_name value .
+
+    $default  reduce using rule 250 (field_value)
+
+
+State 431
+
+  252 field_value_list: field_value field_value_list .
+
+    $default  reduce using rule 252 (field_value_list)
+
+
+State 432
+
+  180 linsert_stmt: LINSERT key_list_name opt_linsert_behavior value . value
+
+    INTLITERAL     shift, and go to state 306
+    FLOATLITERAL   shift, and go to state 319
+    STRINGLITERAL  shift, and go to state 320
+
+    value           go to state 460
+    literal         go to state 337
+    string_literal  go to state 323
+    num_literal     go to state 324
+    int_literal     go to state 325
+    float_literal   go to state 326
+
+
+State 433
+
+  237 value_list: value value_list .
+
+    $default  reduce using rule 237 (value_list)
+
+
+State 434
+
+  187 lrange_stmt: LRANGE key_list_name operandnum operandnum .
+
+    $default  reduce using rule 187 (lrange_stmt)
+
+
+State 435
+
+  188 lrem_stmt: LREM key_list_name operandnum value .
+
+    $default  reduce using rule 188 (lrem_stmt)
+
+
+State 436
+
+  189 lset_stmt: LSET key_list_name operandnum value .
+
+    $default  reduce using rule 189 (lset_stmt)
+
+
+State 437
+
+  190 ltrim_stmt: LTRIM key_list_name operandnum operandnum .
+
+    $default  reduce using rule 190 (ltrim_stmt)
+
+
+State 438
+
+  261 smember_name_list: smember_name smember_name_list .
+
+    $default  reduce using rule 261 (smember_name_list)
+
+
+State 439
+
+  203 smove_stmt: SMOVE key_set_name key_set_name smember_name .
+
+    $default  reduce using rule 203 (smove_stmt)
+
+
+State 440
+
+  256 del_key_set_list: key_set_name del_key_set_list .
+
+    $default  reduce using rule 256 (del_key_set_list)
+
+
+State 441
+
+  268 zmember_value: value zmember_name .
+
+    $default  reduce using rule 268 (zmember_value)
+
+
+State 442
+
+  270 zmember_value_list: zmember_value zmember_value_list .
+
+    $default  reduce using rule 270 (zmember_value_list)
+
+
+State 443
+
+  211 zcount_stmt: ZCOUNT key_zset_name operandnum operandnum .
+
+    $default  reduce using rule 211 (zcount_stmt)
+
+
+State 444
+
+  212 zincrby_stmt: ZINCRBY key_zset_name operandnum zmember_name .
+
+    $default  reduce using rule 212 (zincrby_stmt)
+
+
+State 445
+
+  213 zrange_stmt: ZRANGE key_zset_name operandnum operandnum . opt_zrange_behavior
+
+    WITHSCORES  shift, and go to state 461
+
+    $default  reduce using rule 215 (opt_zrange_behavior)
+
+    opt_zrange_behavior  go to state 462
+
+
+State 446
+
+  217 zrangebyscore_clause: ZRANGEBYSCORE key_zset_name operandnum operandnum .
+
+    $default  reduce using rule 217 (zrangebyscore_clause)
+
+
+State 447
+
+  267 zmember_name_list: zmember_name zmember_name_list .
+
+    $default  reduce using rule 267 (zmember_name_list)
+
+
+State 448
+
+  263 key_zset_list: key_zset_name .
+  264              | key_zset_name . key_zset_list
+
+    IDENTIFIER  shift, and go to state 197
+
+    $default  reduce using rule 263 (key_zset_list)
+
+    key_zset_name  go to state 448
+    key_zset_list  go to state 463
+    identifier     go to state 295
+
+
+State 449
+
+  222 zunionstore_clause: ZUNIONSTORE key_zset_name operandnum key_zset_list .
+
+    $default  reduce using rule 222 (zunionstore_clause)
+
+
+State 450
+
+  230 zinterstore_clause: ZINTERSTORE key_zset_name operandnum key_zset_list .
+
+    $default  reduce using rule 230 (zinterstore_clause)
+
+
+State 451
+
+  128 opt_sort_behavior: ASC .
+
+    $default  reduce using rule 128 (opt_sort_behavior)
+
+
+State 452
+
+  129 opt_sort_behavior: DESC .
+
+    $default  reduce using rule 129 (opt_sort_behavior)
+
+
+State 453
+
+  130 opt_sort_behavior: ALPHA .
+
+    $default  reduce using rule 130 (opt_sort_behavior)
+
+
+State 454
+
+  120 sort_stmt: sort_clause opt_by_clause opt_limit_clause opt_sort_behavior . opt_store_clause
+
+    STORE  shift, and go to state 464
+
+    $default  reduce using rule 127 (opt_store_clause)
+
+    opt_store_clause  go to state 465
+
+
+State 455
+
+  124 opt_limit_clause: LIMIT operandnum operandnum .
+
+    $default  reduce using rule 124 (opt_limit_clause)
+
+
+State 456
+
+  275 operandnum_list: operandnum operandnum_list .
+
+    $default  reduce using rule 275 (operandnum_list)
+
+
+State 457
+
+  225 opt_aggregate_clause: AGGREGATE SUM .
+
+    $default  reduce using rule 225 (opt_aggregate_clause)
+
+
+State 458
+
+  226 opt_aggregate_clause: AGGREGATE MIN .
+
+    $default  reduce using rule 226 (opt_aggregate_clause)
+
+
+State 459
+
+  227 opt_aggregate_clause: AGGREGATE MAX .
+
+    $default  reduce using rule 227 (opt_aggregate_clause)
+
+
+State 460
+
+  180 linsert_stmt: LINSERT key_list_name opt_linsert_behavior value value .
+
+    $default  reduce using rule 180 (linsert_stmt)
+
+
+State 461
+
+  214 opt_zrange_behavior: WITHSCORES .
+
+    $default  reduce using rule 214 (opt_zrange_behavior)
+
+
+State 462
+
+  213 zrange_stmt: ZRANGE key_zset_name operandnum operandnum opt_zrange_behavior .
+
+    $default  reduce using rule 213 (zrange_stmt)
+
+
+State 463
+
+  264 key_zset_list: key_zset_name key_zset_list .
+
+    $default  reduce using rule 264 (key_zset_list)
+
+
+State 464
+
+  126 opt_store_clause: STORE . keyname
+
+    IDENTIFIER  shift, and go to state 197
+
+    keyname     go to state 466
+    identifier  go to state 200
+
+
+State 465
+
+  120 sort_stmt: sort_clause opt_by_clause opt_limit_clause opt_sort_behavior opt_store_clause .
+
+    $default  reduce using rule 120 (sort_stmt)
+
+
+State 466
+
+  126 opt_store_clause: STORE keyname .
+
+    $default  reduce using rule 126 (opt_store_clause)
